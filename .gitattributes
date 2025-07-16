@@ -1,2 +1,51 @@
-/mvnw text eol=lf
-*.cmd text eol=crlf
+# =========================
+# Global Text Normalization
+# =========================
+# Auto-detect text files and normalize line endings
+* text=auto
+
+# Explicitly set LF for Unix-based scripts
+*.sh text eol=lf
+
+# Windows batch scripts keep CRLF
+*.bat text eol=crlf
+
+# =========================
+# Language-Specific Rules
+# =========================
+# Java, Spring Boot backend files
+*.java text eol=lf
+*.properties text eol=lf
+*.yml text eol=lf
+*.xml text eol=lf
+
+# Node.js/React frontend files
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.html text eol=lf
+
+# =========================
+# Binary Files (No Diff)
+# =========================
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg binary
+*.webp binary
+*.zip binary
+*.jar binary
+*.pdf binary
+*.mp4 binary
+*.mov binary
+
+# =========================
+# Git LFS for Large Assets
+# (Uncomment if using LFS)
+# ========

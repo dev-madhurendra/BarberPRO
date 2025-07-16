@@ -1,21 +1,15 @@
 package com.barbershop.api;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import io.github.cdimascio.dotenv.Dotenv;
 
-import java.util.Objects;
-
+@OpenAPIDefinition(info = @Info(title = "Barber Shop API", version = "1.0", description = "API documentation for Barber Shop"))
 @SpringBootApplication
 public class BarberTokenSystemApplication {
 
 	public static void main(String[] args) {
-
-		Dotenv dotenv = Dotenv.load();
-		dotenv.entries().forEach(entry ->
-				System.setProperty(entry.getKey(), entry.getValue())
-		);
-
 		SpringApplication.run(BarberTokenSystemApplication.class, args);
 	}
 
