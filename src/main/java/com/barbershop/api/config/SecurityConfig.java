@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers( SWAGGER_ENDPOINTS).permitAll()
-                        .requestMatchers(AUTH_ENDPOINT).permitAll()
+                        .requestMatchers(AUTHORIZED_AUTH_ENDPOINT).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

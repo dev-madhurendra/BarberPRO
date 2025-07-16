@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8080 # Default to 8080 if not set
 
 spring:
   datasource:
@@ -19,7 +19,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: dev.madhurendra@gmail.com
-    password: Madhu@123Gmail
+    password: smyh tuia uwfo titv
     properties:
       mail:
         smtp:
@@ -30,5 +30,3 @@ spring:
 jwt:
   secret: 3xAmPl3SeCuR3KeYth@t_iS_AtLeAst32Ch@rs
   expiration: 3600000
-
-

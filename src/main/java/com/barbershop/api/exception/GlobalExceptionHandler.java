@@ -1,9 +1,11 @@
 package com.barbershop.api.exception;
 
+import com.barbershop.api.dto.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,27 +14,29 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFound.class)
-    public ResponseEntity<Map<String, Object>> handleResourceNotFound(ResourceNotFound ex) {
-        Map<String, Object> error = new HashMap<>();
-        error.put("error", "Resource Not Found");
-        error.put("message", ex.getMessage());
-        error.put("status", HttpStatus.NOT_FOUND.value());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    public ResponseEntity<ApiResponse<Void>> handleResourceNotFound(ResourceNotFound ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.failure("Resource Not Found: " + ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
-        Map<String, Object> errors = new HashMap<>();
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationErrors(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors()
                 .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+
+        return ResponseEntity.badRequest()
+                .body(ApiResponse.<Map<String, String>>builder()
+                        .success(false)
+                        .message("Validation Failed")
+                        .data(errors)
+                        .timestamp(java.time.LocalDateTime.now())
+                        .build());
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGlobalException(Exception ex) {
-        Map<String, Object> error = new HashMap<>();
-        error.put("error", "Internal Server Error");
-        error.put("message", ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ApiResponse<Void>> handleGlobalException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.failure("Internal Server Error: " + ex.getMessage()));
     }
 }

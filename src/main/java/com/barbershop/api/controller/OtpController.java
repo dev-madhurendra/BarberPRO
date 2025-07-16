@@ -1,24 +1,31 @@
 package com.barbershop.api.controller;
 
+import com.barbershop.api.dto.response.ApiResponse;
 import com.barbershop.api.service.OtpServiceFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.barbershop.api.utils.RouteConstants.*;
+
 @RestController
-@RequestMapping("/api/otp")
+@RequestMapping(OTP_ENDPOINT)
 @RequiredArgsConstructor
 public class OtpController {
 
     private final OtpServiceFactory otpServiceFactory;
 
-    @PostMapping("/send")
-    public String sendOtp(@RequestParam String medium, @RequestParam String destination) {
-        return otpServiceFactory.getOtpService(medium).sendOtp(destination);
+    @PostMapping(SEND_OTP)
+    public ResponseEntity<ApiResponse<Void>> sendOtp(@RequestParam String medium, @RequestParam String destination) {
+        otpServiceFactory.getOtpService(medium).sendOtp(destination);
+        return ResponseEntity.ok(ApiResponse.success("OTP sent successfully to " + destination));
     }
 
-    @PostMapping("/verify")
-    public String verifyOtp(@RequestParam String medium, @RequestParam String destination, @RequestParam String otp) {
+    @PostMapping(VERIFY_OTP)
+    public ResponseEntity<ApiResponse<Void>> verifyOtp(@RequestParam String medium, @RequestParam String destination, @RequestParam String otp) {
         boolean success = otpServiceFactory.getOtpService(medium).verifyOtp(destination, otp);
-        return success ? "OTP Verified Successfully" : "Invalid or Expired OTP";
+        return success
+                ? ResponseEntity.ok(ApiResponse.success("OTP verified successfully"))
+                : ResponseEntity.badRequest().body(ApiResponse.failure("Invalid or expired OTP"));
     }
 }

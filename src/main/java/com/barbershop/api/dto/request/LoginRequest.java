@@ -9,7 +9,7 @@ import static com.barbershop.api.utils.ValidationMessages.*;
 
 @Getter
 @Setter
-public class AuthRequest {
+public class LoginRequest {
 
     @Email(message = INVALID_EMAIL_FORMAT)
     @NotBlank(message = EMAIL_IS_REQUIRED)

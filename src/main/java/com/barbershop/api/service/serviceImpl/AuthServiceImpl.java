@@ -1,6 +1,6 @@
 package com.barbershop.api.service.serviceImpl;
 
-import com.barbershop.api.dto.request.AuthRequest;
+import com.barbershop.api.dto.request.LoginRequest;
 import com.barbershop.api.dto.request.RegisterRequest;
 import com.barbershop.api.dto.response.LoginResponse;
 import com.barbershop.api.dto.response.RegisterResponse;
@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public LoginResponse login(AuthRequest request) {
+    public LoginResponse login(LoginRequest request) {
         var auth = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
         authenticationManager.authenticate(auth);
 
