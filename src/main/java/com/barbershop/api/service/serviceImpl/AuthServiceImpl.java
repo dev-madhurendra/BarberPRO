@@ -16,7 +16,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static com.barbershop.api.utils.ValidationMessages.USER_REGISTERED_SUCCESSFULLY;
+import static com.barbershop.api.utils.ExceptionConstants.EMAIL_ALREADY_REGISTERED;
+import static com.barbershop.api.utils.ExceptionConstants.USER_NOT_FOUND;
+import static com.barbershop.api.utils.ValidationConstants.USER_REGISTERED_SUCCESSFULLY;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public RegisterResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email is already registered.");
+            throw new RuntimeException(EMAIL_ALREADY_REGISTERED);
         }
         User user = User.builder()
                 .name(request.getName())
@@ -49,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
         authenticationManager.authenticate(auth);
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
 
         String token = jwtProvider.generateToken(new UserPrincipal(user));
 

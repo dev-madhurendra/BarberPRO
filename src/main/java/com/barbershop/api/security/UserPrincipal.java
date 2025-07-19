@@ -1,6 +1,6 @@
 package com.barbershop.api.security;
 
-import com.barbershop.api.entity.Role;
+import com.barbershop.api.enums.Role;
 import com.barbershop.api.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -20,13 +20,14 @@ public class SwaggerConfig {
                         .description(SWAGGER_DESCRIPTION)
                         .version(SWAGGER_VERSION)
                         .contact(new Contact()
-                                .name("Madhurendra Nath")
-                                .email("dev.madhurendra@gmail.com")
-                                .url("https://your-portfolio.com"))
+                                .name(SWAGGER_CONTACT_NAME)
+                                .email(SWAGGER_CONTACT_EMAIL)
+                                .url(SWAGGER_CONTACT_URL)
+                        )
                         .license(new License()
-                        .name("Apache 2.0")
-                        .url("https://www.apache.org/licenses/LICENSE-2.0.html"))
+                                .name(SWAGGER_LICENSE_NAME)
+                                .url(SWAGGER_LICENSE_URL)
+                        )
                 );
-
     }
 }

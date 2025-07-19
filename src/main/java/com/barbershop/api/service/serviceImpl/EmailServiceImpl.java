@@ -1,10 +1,16 @@
 package com.barbershop.api.service.serviceImpl;
 
 import com.barbershop.api.service.EmailService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import static com.barbershop.api.utils.EmailTemplateConstants.HTML_EMAIL_TEMPLATE;
+import static com.barbershop.api.utils.EmailTemplateConstants.YOUR_OTP_VERIFICATION;
+import static com.barbershop.api.utils.ExceptionConstants.FAILED_TO_SEND_TOP;
 
 @Service
 @RequiredArgsConstructor
@@ -14,10 +20,20 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendOtpEmail(String to, String otp) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject("Your OTP for Barber Shop Verification");
-        message.setText("Dear User,\n\nYour OTP is: " + otp + "\n\nThis OTP is valid for 10 minutes.\n\nThank you!");
-        mailSender.send(message);
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(to);
+            helper.setSubject(YOUR_OTP_VERIFICATION);
+
+            String htmlContent = HTML_EMAIL_TEMPLATE.formatted(otp);
+
+            helper.setText(htmlContent, true);
+            mailSender.send(message);
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(FAILED_TO_SEND_TOP, e);
+        }
     }
 }

@@ -1,13 +1,13 @@
 package com.barbershop.api.dto.request;
 
-import com.barbershop.api.entity.Role;
+import com.barbershop.api.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-import static com.barbershop.api.utils.ValidationMessages.*;
+import static com.barbershop.api.utils.ValidationConstants.*;
 
 @Data
 public class RegisterRequest {

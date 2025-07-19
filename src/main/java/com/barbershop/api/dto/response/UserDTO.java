@@ -1,7 +1,7 @@
 
 package com.barbershop.api.dto.response;
 
-import com.barbershop.api.entity.Role;
+import com.barbershop.api.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

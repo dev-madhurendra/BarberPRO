@@ -1,4 +1,4 @@
-package com.barbershop.api.entity;
+package com.barbershop.api.enums;
 
 public enum TokenStatus {
     PENDING,

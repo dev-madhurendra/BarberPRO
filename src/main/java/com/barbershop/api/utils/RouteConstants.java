@@ -11,7 +11,10 @@ public interface RouteConstants {
         "/webjars/**"
     };
 
-    String AUTHORIZED_AUTH_ENDPOINT = "/api/v1/auth/**";
+    String[] AUTHORIZED_AUTH_ENDPOINT = new String[]{
+            "/api/v1/auth/**",
+            "/api/v1/otp/**"
+    };
 
     String BASE_ENDPOINT = "/api/v1";
     String AUTH_ENDPOINT = BASE_ENDPOINT + "/auth";
@@ -21,5 +24,8 @@ public interface RouteConstants {
     String SEND_OTP = "/send";
     String VERIFY_OTP = "/verify";
 
+    String PARAM_MEDIUM = "medium";
+    String PARAM_DESTINATION = "destination";
+    String PARAM_OTP = "otp";
 
 }

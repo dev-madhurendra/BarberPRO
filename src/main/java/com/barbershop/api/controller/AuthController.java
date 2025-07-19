@@ -16,43 +16,59 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.barbershop.api.utils.ResponseCodeConstants.*;
+import static com.barbershop.api.utils.ResponseMessageConstants.*;
 import static com.barbershop.api.utils.RouteConstants.*;
+import static com.barbershop.api.utils.SwaggerConstants.*;
 
 @RestController
 @RequestMapping(value = AUTH_ENDPOINT, produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
-@Tag(name = "Auth Management", description = "Endpoints for managing authentication")
+@Tag(name = TAG_AUTH_MANAGEMENT_NAME, description = TAG_AUTH_MANAGEMENT_DESC)
 public class AuthController {
+
 
     private final AuthService authService;
 
     @PostMapping(REGISTER_ENDPOINT)
     @Operation(
-            summary = "Register",
-            description = "Registers a new user.",
+            summary = REGISTER_SUMMARY,
+            description = REGISTER_DESCRIPTION,
             responses = {
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Registration successful",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid input")
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = RESPONSE_200,
+                            description = DESCRIPTION_REGISTRATION_SUCCESSFUL,
+                            content = @Content(mediaType = MEDIA_TYPE_JSON, schema = @Schema(implementation = ApiResponse.class))
+                    ),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = RESPONSE_400,
+                            description = DESCRIPTION_INVALID_INPUT
+                    )
             }
     )
     public ResponseEntity<ApiResponse<RegisterResponse>> register(@Valid @RequestBody RegisterRequest request) {
         RegisterResponse response = authService.register(request);
-        return ResponseEntity.ok(ApiResponse.success("User registered successfully", response));
+        return ResponseEntity.ok(ApiResponse.success(REGISTER_SUCCESS_MESSAGE, response));
     }
 
     @PostMapping(LOGIN_ENDPOINT)
     @Operation(
-            summary = "Login",
-            description = "Authenticates a user and returns a JWT token.",
+            summary = LOGIN_SUMMARY,
+            description = LOGIN_DESCRIPTION,
             responses = {
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Login successful",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Invalid credentials")
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = RESPONSE_200,
+                            description = DESCRIPTION_LOGIN_SUCCESSFUL,
+                            content = @Content(mediaType = MEDIA_TYPE_JSON, schema = @Schema(implementation = ApiResponse.class))
+                    ),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = RESPONSE_401,
+                            description = DESCRIPTION_INVALID_CREDENTIALS
+                    )
             }
     )
     public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
         LoginResponse response = authService.login(request);
-        return ResponseEntity.ok(ApiResponse.success("Login successful", response));
+        return ResponseEntity.ok(ApiResponse.success(LOGIN_SUCCESS_MESSAGE, response));
     }
 }

@@ -13,7 +13,6 @@ import java.util.Arrays;
 @Slf4j
 public class LoggingAspect {
 
-    // Log all controller methods
     @Pointcut("within(com.barbershop.api.controller..*)")
     public void controllerMethods() {}
 

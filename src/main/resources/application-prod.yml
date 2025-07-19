@@ -1,14 +1,14 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT}
 
 spring:
   config:
     import: optional:file:.env[.properties]
 
   datasource:
-    url: jdbc:postgresql://localhost:3000/barber_token_db
-    username: postgres
-    password: admin
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
@@ -21,8 +21,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: dev.madhurendra@gmail.com
-    password: smyh tuia uwfo titv
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_APP_PASSWORD}
     properties:
       mail:
         smtp:
@@ -31,12 +31,14 @@ spring:
             enable: true
 
 jwt:
-  secret: 3xAmPl3SeCuR3KeYth@t_iS_AtLeAst32Ch@rs
-  expiration: 3600000
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
 
 cors:
-  allowed-origins: "http://localhost:5173"
-  allowed-methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+  allowed-origins:
+    - ""
+  allowed-methods:
+    - "GET"
 
 spring-doc:
   api-docs:

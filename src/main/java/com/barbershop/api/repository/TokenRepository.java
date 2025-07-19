@@ -2,7 +2,7 @@ package com.barbershop.api.repository;
 
 import com.barbershop.api.entity.BarberShop;
 import com.barbershop.api.entity.Token;
-import com.barbershop.api.entity.TokenStatus;
+import com.barbershop.api.enums.TokenStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;

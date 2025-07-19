@@ -1,5 +1,6 @@
 package com.barbershop.api.entity;
 
+import com.barbershop.api.enums.TokenStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

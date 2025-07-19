@@ -1,6 +1,5 @@
 package com.barbershop.api.dto.response;
 
-import com.barbershop.api.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
-import static com.barbershop.api.utils.ValidationMessages.*;
+import static com.barbershop.api.utils.ValidationConstants.*;
 
 @Getter
 @Setter

@@ -35,8 +35,16 @@ jwt:
   expiration: 3600000
 
 cors:
-  allowed-origins: "http://localhost:5173"
-  allowed-methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+  allowed-origins:
+    - "http://localhost:5173"
+    - "http://localhost:3000"
+    - "https://your-production-domain.com"
+  allowed-methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "DELETE"
+    - "OPTIONS"
 
 spring-doc:
   api-docs:

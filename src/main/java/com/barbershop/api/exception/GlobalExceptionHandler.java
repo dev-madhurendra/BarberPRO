@@ -10,13 +10,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.barbershop.api.utils.ExceptionConstants.*;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFound.class)
     public ResponseEntity<ApiResponse<Void>> handleResourceNotFound(ResourceNotFound ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(ApiResponse.failure("Resource Not Found: " + ex.getMessage()));
+                .body(ApiResponse.failure(RESOURCE_NOT_FOUND + ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -28,7 +30,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest()
                 .body(ApiResponse.<Map<String, String>>builder()
                         .success(false)
-                        .message("Validation Failed")
+                        .message(VALIDATION_FAILED)
                         .data(errors)
                         .timestamp(java.time.LocalDateTime.now())
                         .build());
@@ -37,6 +39,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGlobalException(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.failure("Internal Server Error: " + ex.getMessage()));
+                .body(ApiResponse.failure(INTERNAL_SERVER_ERROR + ex.getMessage()));
     }
 }
