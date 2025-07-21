@@ -1,0 +1,65 @@
+server:
+  port: 8080
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+    url: jdbc:postgresql://localhost:3000/barber_token_db
+    username: postgres
+    password: admin
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: dev.madhurendra@gmail.com
+    password: smyh tuia uwfo titv
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 70964715954-comus2knhoh30fponnlu9lfh27on6ama.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: sub
+
+
+jwt:
+  secret: 3xAmPl3SeCuR3KeYth@t_iS_AtLeAst32Ch@rs
+  expiration: 3600000
+
+cors:
+  allowed-origins: http://localhost:5173,http://127.0.0.1:5173
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+
+spring-doc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
