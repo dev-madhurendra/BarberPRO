@@ -31,7 +31,7 @@ public class Token {
     private User customer;
 
     @ManyToOne
-    private BarberShop shop;
+    private BarberProfile barberProfile;
 
     private LocalDateTime requestedAt;
 

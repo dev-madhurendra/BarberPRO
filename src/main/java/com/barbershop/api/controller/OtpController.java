@@ -1,6 +1,7 @@
 package com.barbershop.api.controller;
 
 import com.barbershop.api.dto.response.ApiResponse;
+import com.barbershop.api.dto.response.VerificationResponse;
 import com.barbershop.api.service.OtpServiceFactory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -48,19 +49,25 @@ public class OtpController {
             summary = SUMMARY_VERIFY_OTP,
             description = DESCRIPTION_VERIFY_OTP,
             responses = {
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = RESPONSE_200, description = DESCRIPTION_OTP_VERIFIED_SUCCESS,
-                            content = @Content(mediaType = MEDIA_TYPE_JSON, schema = @Schema(implementation = ApiResponse.class))),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = RESPONSE_200,
+                            description = DESCRIPTION_OTP_VERIFIED_SUCCESS,
+                            content = @Content(mediaType = MEDIA_TYPE_JSON, schema = @Schema(implementation = ApiResponse.class))
+                    ),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = RESPONSE_400, description = DESCRIPTION_INVALID_OR_EXPIRED_OTP)
             }
     )
-    public ResponseEntity<ApiResponse<Void>> verifyOtp(
+    public ResponseEntity<ApiResponse<VerificationResponse>> verifyOtp(
             @RequestParam(name = PARAM_MEDIUM) String medium,
             @RequestParam(name = PARAM_DESTINATION) String destination,
             @RequestParam(name = PARAM_OTP) String otp) {
 
-        boolean success = otpServiceFactory.getOtpService(medium).verifyOtp(destination, otp);
-        return success
-                ? ResponseEntity.ok(ApiResponse.success(RESPONSE_MESSAGE_OTP_VERIFIED))
-                : ResponseEntity.badRequest().body(ApiResponse.failure(RESPONSE_MESSAGE_OTP_INVALID));
+        VerificationResponse response = otpServiceFactory.getOtpService(medium).verifyOtp(destination, otp);
+
+        if (response.getToken() != null) {
+            return ResponseEntity.ok(ApiResponse.success(RESPONSE_OTP_VERIFIED_BARBER_REGISTER, response));
+        }
+        return ResponseEntity.ok(ApiResponse.success(RESPONSE_MESSAGE_OTP_VERIFIED, response));
     }
+
 }

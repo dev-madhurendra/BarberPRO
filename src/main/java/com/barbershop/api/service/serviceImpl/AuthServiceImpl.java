@@ -2,14 +2,17 @@ package com.barbershop.api.service.serviceImpl;
 
 import com.barbershop.api.dto.request.LoginRequest;
 import com.barbershop.api.dto.request.RegisterRequest;
+import com.barbershop.api.dto.request.ResetPasswordRequest;
 import com.barbershop.api.dto.response.LoginResponse;
 import com.barbershop.api.dto.response.RegisterResponse;
 import com.barbershop.api.dto.response.UserDTO;
 import com.barbershop.api.entity.User;
+import com.barbershop.api.exception.ResourceNotFound;
 import com.barbershop.api.repository.UserRepository;
 import com.barbershop.api.security.JwtProvider;
 import com.barbershop.api.security.UserPrincipal;
 import com.barbershop.api.service.AuthService;
+import com.barbershop.api.service.OtpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final AuthenticationManager authenticationManager;
+    private final OtpService otpService;
 
     @Override
     public RegisterResponse register(RegisterRequest request) {
@@ -52,6 +56,38 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
+
+        String token = jwtProvider.generateToken(new UserPrincipal(user));
+
+        UserDTO userDTO = UserDTO.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .build();
+
+        return new LoginResponse(token, userDTO);
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new ResourceNotFound("User not found with email " + request.getEmail()));
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+    }
+
+    @Override
+    public LoginResponse googleLogin(String email, String name) {
+        User user = userRepository.findByEmail(email).orElseGet(() -> {
+            User newUser = User.builder()
+                    .name(name)
+                    .email(email)
+                    .password("")
+                    .build();
+            return userRepository.save(newUser);
+        });
 
         String token = jwtProvider.generateToken(new UserPrincipal(user));
 

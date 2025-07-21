@@ -2,6 +2,7 @@ package com.barbershop.api.controller;
 
 import com.barbershop.api.dto.request.LoginRequest;
 import com.barbershop.api.dto.request.RegisterRequest;
+import com.barbershop.api.dto.request.ResetPasswordRequest;
 import com.barbershop.api.dto.response.ApiResponse;
 import com.barbershop.api.dto.response.LoginResponse;
 import com.barbershop.api.dto.response.RegisterResponse;
@@ -26,7 +27,6 @@ import static com.barbershop.api.utils.SwaggerConstants.*;
 @RequiredArgsConstructor
 @Tag(name = TAG_AUTH_MANAGEMENT_NAME, description = TAG_AUTH_MANAGEMENT_DESC)
 public class AuthController {
-
 
     private final AuthService authService;
 
@@ -71,4 +71,38 @@ public class AuthController {
         LoginResponse response = authService.login(request);
         return ResponseEntity.ok(ApiResponse.success(LOGIN_SUCCESS_MESSAGE, response));
     }
+
+    @PostMapping(RESET_PASSWORD_ENDPOINT)
+    @Operation(
+            summary = "Reset Password",
+            description = "Reset the user's password using email and OTP",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = RESPONSE_200,
+                            description = "Password reset successful",
+                            content = @Content(mediaType = MEDIA_TYPE_JSON, schema = @Schema(implementation = ApiResponse.class))
+                    ),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = RESPONSE_400,
+                            description = "Invalid OTP or request data"
+                    )
+            }
+    )
+    public ResponseEntity<ApiResponse<String>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        authService.resetPassword(request);
+        return ResponseEntity.ok(ApiResponse.success("Password reset successful", null));
+    }
+
+    @GetMapping("/oauth2/google")
+    public ResponseEntity<ApiResponse<LoginResponse>> googleAuth(
+            @RequestParam String email,
+            @RequestParam String name
+    ) {
+        LoginResponse response = authService.googleLogin(email, name);
+        return ResponseEntity.ok(ApiResponse.success("Google Login Successful", response));
+    }
+
+
+
+
 }

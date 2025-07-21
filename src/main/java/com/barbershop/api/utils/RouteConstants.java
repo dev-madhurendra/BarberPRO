@@ -13,7 +13,8 @@ public interface RouteConstants {
 
     String[] AUTHORIZED_AUTH_ENDPOINT = new String[]{
             "/api/v1/auth/**",
-            "/api/v1/otp/**"
+            "/api/v1/otp/**",
+            "/oauth2/**"
     };
 
     String BASE_ENDPOINT = "/api/v1";
@@ -28,4 +29,10 @@ public interface RouteConstants {
     String PARAM_DESTINATION = "destination";
     String PARAM_OTP = "otp";
 
+    String CREATE_BARBER = "/barbers";
+    String BARBER_ID = "/barbers/{id}";
+    String SEARCH_BARBER = "/barbers/search";
+
+
+    String RESET_PASSWORD_ENDPOINT = "/reset-password";
 }
