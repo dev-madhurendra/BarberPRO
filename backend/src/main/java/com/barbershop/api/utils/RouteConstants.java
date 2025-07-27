@@ -14,7 +14,7 @@ public interface RouteConstants {
     String[] AUTHORIZED_AUTH_ENDPOINT = new String[]{
             "/api/v1/auth/**",
             "/api/v1/otp/**",
-            "api/v1/user/**"
+            "/api/v1/user/**"
     };
 
     String BASE_ENDPOINT = "/api/v1";
