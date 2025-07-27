@@ -2,21 +2,18 @@ name: Simple CI
 
 on:
   push:
-    branches: [main]
-    paths:
-      - 'backend/**'
-      - 'frontend/**'
+    branches: [main, BE_*, FE_*]
   pull_request:
-    branches: [main]
-    paths:
-      - 'backend/**'
-      - 'frontend/**'
+    branches: [main, BE_*, FE_*]
 
 jobs:
   build-backend:
     name: 🚀 Build Spring Boot Backend (Java 21)
-    if: contains(github.event.head_commit.message, '[backend]') || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'pull_request' ||
+      startsWith(github.ref_name, 'BE_') ||
+      contains(github.event.head_commit.message, '[backend]')
     steps:
       - name: ⬇️ Checkout code
         uses: actions/checkout@v3
@@ -32,10 +29,16 @@ jobs:
           cd backend
           mvn clean install -DskipTests
 
+    paths:
+      - 'backend/**'
+
   build-frontend:
     name: 🌐 Build React Frontend
-    if: contains(github.event.head_commit.message, '[frontend]') || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'pull_request' ||
+      startsWith(github.ref_name, 'FE_') ||
+      contains(github.event.head_commit.message, '[frontend]')
     steps:
       - name: ⬇️ Checkout code
         uses: actions/checkout@v3
@@ -50,3 +53,6 @@ jobs:
           cd frontend
           npm install
           npm run build
+
+    paths:
+      - 'frontend/**'
