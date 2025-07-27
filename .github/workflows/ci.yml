@@ -29,9 +29,6 @@ jobs:
           cd backend
           mvn clean install -DskipTests
 
-    paths:
-      - 'backend/**'
-
   build-frontend:
     name: 🌐 Build React Frontend
     runs-on: ubuntu-latest
@@ -53,6 +50,3 @@ jobs:
           cd frontend
           npm install
           npm run build
-
-    paths:
-      - 'frontend/**'
