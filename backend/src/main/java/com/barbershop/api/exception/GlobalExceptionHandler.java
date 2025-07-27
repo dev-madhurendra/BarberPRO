@@ -3,6 +3,7 @@ package com.barbershop.api.exception;
 import com.barbershop.api.dto.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -21,6 +22,12 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.failure(RESOURCE_NOT_FOUND + ex.getMessage()));
     }
 
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiResponse<Void>> handleBadCredentials(BadCredentialsException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.failure(INVALID_EMAIL_OR_PASSWORD));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationErrors(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -36,9 +43,21 @@ public class GlobalExceptionHandler {
                         .build());
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ApiResponse<Void>> handleRuntime(RuntimeException ex) {
+        return ResponseEntity.badRequest()
+                .body(ApiResponse.failure(ex.getMessage()));
+    }
+
+    @ExceptionHandler(AppException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAppException(AppException ex) {
+        return ResponseEntity.badRequest()
+                .body(ApiResponse.failure(ex.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGlobalException(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.failure(INTERNAL_SERVER_ERROR + ex.getMessage()));
+                .body(ApiResponse.failure(ex.getMessage()));
     }
 }

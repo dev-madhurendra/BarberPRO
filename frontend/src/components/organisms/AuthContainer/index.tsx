@@ -14,6 +14,11 @@ const AuthContainer = () => {
     | "resetPassword"
   >("login");
 
+  const handleSetRole = (newRole: "customer" | "barber") => {
+    setRole(newRole)
+    localStorage.setItem("role", newRole)
+  }
+
   return (
     <AuthWrapper>
       {authMode !== "verifyOtp" &&
@@ -22,7 +27,7 @@ const AuthContainer = () => {
         authMode !== "resetOtp" && ( 
           <AuthTabs
             activeRole={role}
-            onRoleChange={(newRole) => setRole(newRole)}
+            onRoleChange={(newRole) => handleSetRole(newRole)}
           />
         )}
 

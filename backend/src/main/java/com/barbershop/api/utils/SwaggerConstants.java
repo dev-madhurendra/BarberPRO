@@ -56,4 +56,16 @@ public interface SwaggerConstants {
     String DESCRIPTION_GET_BARBER = "Retrieve details of a barber profile by its ID.";
     String DESCRIPTION_SEARCH_BARBER = "Search barbers by matching the provided address.";
     String DESCRIPTION_DELETE_BARBER = "Delete a barber profile based on its ID.";
+
+    String RESET_PASSWORD_SUMMARY = "Reset Password";
+    String RESET_PASSWORD_DESCRIPTION = "Reset the user's password using email and OTP";
+
+    String GOOGLE_LOGIN_SUMMARY = "Google OAuth2 Login";
+    String GOOGLE_LOGIN_DESCRIPTION = "Authenticate user via Google OAuth2 with optional role selection";
+    String INVALID_ROLE_OR_TOKEN = "Invalid role or token";
+    String USER_EMAIL_GOOGLE_OAUTH_2 = "User's email from Google OAuth2";
+    String USER_NAME_GOOGLE_OAUTH_2 = "User's name from Google OAuth2";
+    String USER_ROLES = "User's role (CUSTOMER, BARBER, ADMIN)";
+    String CUSTOMER = "CUSTOMER";
+    String CHANGE_ROLE_SUMMARY = "Change Role";
 }

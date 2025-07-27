@@ -12,4 +12,5 @@ public interface ValidationConstants {
     String OTP_IS_REQUIRED = "Otp is required";
     String IS_VERIFIED = "is_verified";
     String OTP_EXPIRY = "otp_expiry";
+    String IS_BARBER_PROFILE_UPDATED = "is_barber_profile_updated";
 }

@@ -1,20 +1,23 @@
 package com.barbershop.api.service.serviceImpl;
 
+import com.barbershop.api.dto.response.BarberDTO;
 import com.barbershop.api.dto.response.BarberProfileResponse;
-import com.barbershop.api.dto.response.UserDTO;
 import com.barbershop.api.entity.BarberProfile;
 import com.barbershop.api.entity.User;
+import com.barbershop.api.exception.AppException;
 import com.barbershop.api.repository.BarberProfileRepository;
 import com.barbershop.api.repository.UserRepository;
 import com.barbershop.api.security.UserPrincipal;
 import com.barbershop.api.service.BarberProfileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static com.barbershop.api.utils.ResponseMessageConstants.RESPONSE_BARBER_PROFILE_NOT_FOUND;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BarberProfileServiceImpl implements BarberProfileService {
@@ -24,22 +27,35 @@ public class BarberProfileServiceImpl implements BarberProfileService {
 
     @Override
     public BarberProfileResponse createBarberProfile(BarberProfile profile, UserPrincipal userPrincipal) {
+        log.info("Starting createBarberProfile for user: {}", userPrincipal.getEmail());
+
         User user = userRepository.findByEmail(userPrincipal.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found for email: " + userPrincipal.getEmail()));
+                .orElseThrow(() -> {
+                    log.error("User not found with email: {}", userPrincipal.getEmail());
+                    return new AppException("User not found for email: " + userPrincipal.getEmail());
+                });
+
+        log.info("User found: {}", user.getEmail());
 
         profile.setUser(user);
         BarberProfile savedProfile = barberProfileRepository.save(profile);
+        log.info("Barber profile saved with ID: {}", savedProfile.getId());
 
-        UserDTO userDTO = UserDTO.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .role(user.getRole())
+        user.setBarberProfileUpdated(true);
+        User savedUser = userRepository.save(user);
+        log.info("User updated with barber profile status: {}", savedUser.isBarberProfileUpdated());
+
+        BarberDTO barberDTO = BarberDTO.builder()
+                .id(savedUser.getId())
+                .name(savedUser.getName())
+                .email(savedUser.getEmail())
+                .role(savedUser.getRole())
+                .isBarberProfileUpdated(true)
                 .build();
 
-        return BarberProfileResponse.builder()
+        BarberProfileResponse response = BarberProfileResponse.builder()
                 .id(savedProfile.getId())
-                .userDTO(userDTO)
+                .barberDTO(barberDTO)
                 .shopName(savedProfile.getShopName())
                 .phoneNumber(savedProfile.getPhoneNumber())
                 .address(savedProfile.getAddress())
@@ -48,14 +64,15 @@ public class BarberProfileServiceImpl implements BarberProfileService {
                 .servicesOffered(savedProfile.getServicesOffered())
                 .startingPrice(savedProfile.getStartingPrice())
                 .build();
+
+        log.info("BarberProfileResponse successfully created for user: {}", user.getEmail());
+        return response;
     }
-
-
 
     @Override
     public BarberProfileResponse updateBarberProfile(Long id, BarberProfile profile) {
         BarberProfile existing = barberProfileRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(RESPONSE_BARBER_PROFILE_NOT_FOUND));
+                .orElseThrow(() -> new AppException(RESPONSE_BARBER_PROFILE_NOT_FOUND));
 
         existing.setShopName(profile.getShopName());
         existing.setAddress(profile.getAddress());
@@ -82,7 +99,7 @@ public class BarberProfileServiceImpl implements BarberProfileService {
     @Override
     public BarberProfileResponse getBarberProfile(Long id) {
         BarberProfile profile = barberProfileRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(RESPONSE_BARBER_PROFILE_NOT_FOUND));
+                .orElseThrow(() -> new AppException(RESPONSE_BARBER_PROFILE_NOT_FOUND));
 
         return BarberProfileResponse.builder()
                 .id(profile.getId())
@@ -103,7 +120,7 @@ public class BarberProfileServiceImpl implements BarberProfileService {
         List<BarberProfile> profiles = barberProfileRepository.findByAddressContainingIgnoreCase(address);
 
         if (profiles.isEmpty()) {
-            throw new RuntimeException("No barber profiles found for address: " + address);
+            throw new AppException("No barber profiles found for address: " + address);
         }
 
         return profiles.stream()
@@ -125,4 +142,5 @@ public class BarberProfileServiceImpl implements BarberProfileService {
     public void deleteBarberProfile(Long id) {
         barberProfileRepository.deleteById(id);
     }
+
 }

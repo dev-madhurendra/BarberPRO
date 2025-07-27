@@ -14,7 +14,7 @@ public interface RouteConstants {
     String[] AUTHORIZED_AUTH_ENDPOINT = new String[]{
             "/api/v1/auth/**",
             "/api/v1/otp/**",
-            "/oauth2/**"
+            "/api/v1/user/**"
     };
 
     String BASE_ENDPOINT = "/api/v1";
@@ -35,4 +35,9 @@ public interface RouteConstants {
 
 
     String RESET_PASSWORD_ENDPOINT = "/reset-password";
+    String CHANGE_ROLE_ENDPOINT = "/change-role";
+    String GOOGLE_LOGIN_ENDPOINT = "/google";
+
+    String USER_ENDPOINT = "/api/v1/user";
+
 }

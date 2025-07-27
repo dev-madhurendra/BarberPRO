@@ -5,8 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 import static com.barbershop.api.utils.RouteConstants.PARAM_OTP;
-import static com.barbershop.api.utils.ValidationConstants.IS_VERIFIED;
-import static com.barbershop.api.utils.ValidationConstants.OTP_EXPIRY;
+import static com.barbershop.api.utils.ValidationConstants.*;
 
 @Entity
 @Table(name = "t_user")
@@ -33,6 +32,9 @@ public class User {
 
     @Column(name = IS_VERIFIED)
     private boolean isVerified = false;
+
+    @Column(name = IS_BARBER_PROFILE_UPDATED, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean isBarberProfileUpdated = false;
 
     @Column(name = PARAM_OTP)
     private String otp;

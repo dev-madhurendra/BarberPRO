@@ -20,13 +20,15 @@ public class UserPrincipal implements UserDetails {
     private final String email;
     private final String password;
     private final Role role;
+    private final boolean isBarberProfileUpdated;
 
-    public UserPrincipal(User user) {
+    public UserPrincipal(User user, boolean isBarberProfileUpdated) {
         this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.role = user.getRole();
+        this.isBarberProfileUpdated = isBarberProfileUpdated;
     }
 
     @Override

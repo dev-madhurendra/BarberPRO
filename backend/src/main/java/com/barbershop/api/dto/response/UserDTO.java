@@ -1,14 +1,15 @@
-
 package com.barbershop.api.dto.response;
+
+
 
 import com.barbershop.api.enums.Role;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
 @AllArgsConstructor
+@SuperBuilder
 public class UserDTO {
     private Long id;
     private String name;
