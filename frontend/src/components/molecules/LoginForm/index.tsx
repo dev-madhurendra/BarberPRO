@@ -12,6 +12,7 @@ interface LoginFormProps {
   password: string;
   isLoading: boolean;
   error: string | null;
+  role: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
   onToggleMode: () => void;
@@ -23,6 +24,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
   password,
   isLoading,
   error,
+  role,
   onChange,
   onSubmit,
   onToggleMode,
@@ -74,7 +76,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
       />
 
       <SocialLoginButtons
-        onGoogleClick={() => console.log("Google Login")}
+        onGoogleClick={() => {console.log(role)}}
         onGithubClick={() => console.log("GitHub Login")}
         onTwitterClick={() => console.log("Twitter Login")}
       />

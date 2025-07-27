@@ -6,8 +6,10 @@ import {
   verifyOtp,
   loginUser,
   resetPassword,
+  findUserByEmail,
 } from "../api/auth";
 import { ToastService } from "../utils/toastService";
+import axios from "axios";
 
 type AuthMode =
   | "login"
@@ -49,7 +51,7 @@ export const useAuthForm = (
   // Handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  }
+  };
 
   const handleOtpChange = (otp: string) =>
     setFormData((prev) => ({ ...prev, otp }));
@@ -73,10 +75,22 @@ export const useAuthForm = (
           return;
         }
         setIsLoading(true);
-        await sendOtp(formData.email);
-        ToastService.success("OTP sent! Verify to reset password.");
-        setAuthMode("resetOtp");
-        return;
+        const response = await findUserByEmail(formData.email);
+        const currentRoleFromLocalStoratge = localStorage.getItem("role");
+
+        if (
+          response.data.data.role?.toLowerCase() !==
+          currentRoleFromLocalStoratge
+        ) {
+          ToastService.error("Invalid email or role is not selected correctly")
+          navigate("/")
+          return;
+        } else {
+          await sendOtp(formData.email);
+          ToastService.success("OTP sent! Verify to reset password.");
+          setAuthMode("resetOtp");
+          return;
+        }
       }
 
       // RESET OTP
@@ -146,7 +160,6 @@ export const useAuthForm = (
         return;
       }
 
-      // VERIFY OTP
       if (mode === "verifyOtp") {
         if (!formData.otp) {
           ToastService.error("Please enter the OTP.");
@@ -169,7 +182,6 @@ export const useAuthForm = (
         return;
       }
 
-      // LOGIN
       if (mode === "login") {
         if (!formData.email || !formData.password) {
           ToastService.error("Please enter email and password.");
@@ -181,9 +193,21 @@ export const useAuthForm = (
           password: formData.password,
         });
 
-        localStorage.setItem("token", userData.data.data.token);
-        localStorage.setItem("role", userData.data.data.user.role);
-        ToastService.success("Login Successful!");
+        const currentLocalStorageRole = localStorage.getItem("role");
+
+        if (
+          userData.data.data.user.role?.toLowerCase() !==
+          currentLocalStorageRole
+        ) {
+          navigate("/");
+          ToastService.error(
+            "Invalid login details or selected role is not correct."
+          );
+        } else {
+          localStorage.setItem("token", userData.data.data.token);
+          localStorage.setItem("role", userData.data.data.user.role);
+          ToastService.success("Login Successful!");
+        }
 
         resetForm();
 
@@ -194,13 +218,14 @@ export const useAuthForm = (
         }
       }
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        ToastService.error(err.message);
-      } else if (typeof err === "object" && err !== null && "response" in err) {
-        const response = (err as { response?: { data?: { message?: string } } })
-          .response;
-        ToastService.error(response?.data?.message || "Something went wrong.");
+      if (axios.isAxiosError(err)) {
+        const status = err.response?.status;
+        const message = err.response?.data?.message || "Something went wrong.";
+        console.error("Error status:", status);
+        console.error("Full error:", err.response);
+        ToastService.error(message);
       } else {
+        console.error("Unknown error:", err);
         ToastService.error("Something went wrong.");
       }
     } finally {

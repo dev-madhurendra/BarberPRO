@@ -54,6 +54,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ role, mode, setAuthMode }) => {
           password={formData.password}
           isLoading={isLoading}
           error={error}
+          role={role}
           onChange={handleChange}
           onSubmit={handleSubmit}
           onToggleMode={() => setAuthMode("register")}

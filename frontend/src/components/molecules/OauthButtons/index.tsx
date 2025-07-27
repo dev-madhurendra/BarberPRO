@@ -4,7 +4,7 @@ import { SOCIAL_LOGIN_BUTTONS } from "../../../utils/functionConfig";
 
 interface SocialLoginButtonsProps {
   title?: string;
-  onGoogleClick?: (email: string, name: string) => void;
+  onGoogleClick?: () => void;
   onGithubClick?: () => void;
   onTwitterClick?: () => void;
 }

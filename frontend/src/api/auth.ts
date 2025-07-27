@@ -43,3 +43,33 @@ export const saveBarberProfile = async (data: BarberProfileRequest) => {
     },
   });
 };
+
+
+export const updateRole = async (newRole: string) => {
+  const token = localStorage.getItem("token");
+  return axios.post(
+    `${API_BASE}/auth/change-role`,
+    { role: newRole.toUpperCase() },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const getCurrentUser = async () => {
+  const token = localStorage.getItem("token");
+  return axios.get(`${API_BASE}/auth/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+
+export const findUserByEmail = async (email: string) => {
+  return await axios.get(
+    `${API_BASE}/user?email=${email}`
+  );
+};

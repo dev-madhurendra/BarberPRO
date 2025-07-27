@@ -22,24 +22,13 @@ export const LOGIN_FORM_INPUT_FIELDS = (email: string, password: string) => [
 export const SOCIAL_LOGIN_BUTTONS = (
   onGithubClick?: () => void,
   onTwitterClick?: () => void,
-  onGoogleClick?: (email: string, name: string) => void
+  onGoogleClick?: () => void
 ) => [
   { icon: <FaGithub size={20} />, onClick: onGithubClick, className: "github" },
-  {
-    icon: <BsTwitterX size={20} />,
-    onClick: onTwitterClick,
-    className: "twitter",
-  },
-  {
-    icon: <FcGoogle size={20} />,
-    onClick: () => {
-      if (onGoogleClick) {
-        onGoogleClick("madhurendra.tiwari@zemosolabs.com", "Google User");
-      }
-    },
-    className: "google",
-  },
+  { icon: <BsTwitterX size={20} />, onClick: onTwitterClick, className: "twitter" },
+  { icon: <FcGoogle size={20} />, onClick: onGoogleClick, className: "google" },
 ];
+
 
 export const REGISTER_FORM_INPUT_FIELDS = (formData: {
   name: string;
@@ -147,5 +136,41 @@ export const GET_AUTH_HEADING = (role: string, mode: string): string => {
       return `${roleLabel} Reset Password`;
     default:
       return `${roleLabel} Auth`;
+  }
+};
+
+interface JwtPayload {
+  sub: string;
+  email: string;
+  role: string;
+  exp: number;
+  iat: number;
+  isBarberProfileUpdated: boolean;
+}
+
+export const decodeJWT = (token: string): JwtPayload | null => {
+  try {
+    const base64Url = token.split('.')[1];
+    if (!base64Url) return null;
+
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const paddedBase64 = base64.padEnd(base64.length + (4 - (base64.length % 4)) % 4, '=');
+    const json = atob(paddedBase64);
+    const decodedPayload = JSON.parse(json);
+
+    if (
+      typeof decodedPayload.sub === 'string' &&
+      typeof decodedPayload.email === 'string' &&
+      typeof decodedPayload.role === 'string' &&
+      typeof decodedPayload.exp === 'number' &&
+      typeof decodedPayload.iat === 'number'
+    ) {
+      return decodedPayload as JwtPayload;
+    }
+
+    return null;
+  } catch (error) {
+    console.error("JWT decode failed:", error);
+    return null;
   }
 };
