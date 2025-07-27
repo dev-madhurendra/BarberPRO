@@ -3,12 +3,19 @@ name: Simple CI
 on:
   push:
     branches: [main]
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
   pull_request:
     branches: [main]
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
 
 jobs:
   build-backend:
     name: 🚀 Build Spring Boot Backend (Java 21)
+    if: contains(github.event.head_commit.message, '[backend]') || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout code
@@ -27,6 +34,7 @@ jobs:
 
   build-frontend:
     name: 🌐 Build React Frontend
+    if: contains(github.event.head_commit.message, '[frontend]') || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout code
