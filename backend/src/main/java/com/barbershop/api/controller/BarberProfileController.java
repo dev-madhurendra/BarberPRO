@@ -16,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.barbershop.api.utils.RouteConstants.*;
 import static com.barbershop.api.utils.SwaggerConstants.*;

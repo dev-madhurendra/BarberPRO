@@ -3,19 +3,23 @@ package com.barbershop.api.service.serviceImpl;
 import com.barbershop.api.dto.request.LoginRequest;
 import com.barbershop.api.dto.request.RegisterRequest;
 import com.barbershop.api.dto.request.ResetPasswordRequest;
+import com.barbershop.api.dto.response.BarberDTO;
 import com.barbershop.api.dto.response.LoginResponse;
 import com.barbershop.api.dto.response.RegisterResponse;
 import com.barbershop.api.dto.response.UserDTO;
 import com.barbershop.api.entity.User;
+import com.barbershop.api.enums.Role;
+import com.barbershop.api.exception.AppException;
 import com.barbershop.api.exception.ResourceNotFound;
 import com.barbershop.api.repository.UserRepository;
 import com.barbershop.api.security.JwtProvider;
 import com.barbershop.api.security.UserPrincipal;
 import com.barbershop.api.service.AuthService;
-import com.barbershop.api.service.OtpService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +27,7 @@ import static com.barbershop.api.utils.ExceptionConstants.EMAIL_ALREADY_REGISTER
 import static com.barbershop.api.utils.ExceptionConstants.USER_NOT_FOUND;
 import static com.barbershop.api.utils.ValidationConstants.USER_REGISTERED_SUCCESSFULLY;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -31,12 +36,11 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final AuthenticationManager authenticationManager;
-    private final OtpService otpService;
 
     @Override
     public RegisterResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException(EMAIL_ALREADY_REGISTERED);
+            throw new AppException(EMAIL_ALREADY_REGISTERED);
         }
         User user = User.builder()
                 .name(request.getName())
@@ -55,9 +59,9 @@ public class AuthServiceImpl implements AuthService {
         authenticationManager.authenticate(auth);
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
+                .orElseThrow(() -> new AppException(USER_NOT_FOUND));
 
-        String token = jwtProvider.generateToken(new UserPrincipal(user));
+        String token = jwtProvider.generateToken(new UserPrincipal(user, user.isBarberProfileUpdated()));
 
         UserDTO userDTO = UserDTO.builder()
                 .id(user.getId())
@@ -79,26 +83,47 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public LoginResponse googleLogin(String email, String name) {
-        User user = userRepository.findByEmail(email).orElseGet(() -> {
-            User newUser = User.builder()
-                    .name(name)
-                    .email(email)
-                    .password("")
-                    .build();
-            return userRepository.save(newUser);
-        });
+    public UserDTO updateRoleAsBarber(String token, String newRole) {
+        String email = jwtProvider.extractUsername(token);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        log.info(">> Role is updating from {} to {}", user.getRole(), newRole);
+        user.setRole(Role.valueOf(newRole.toUpperCase()));
+        user.setVerified(true);
+        User updatedRoleUser = userRepository.save(user);
+        return UserDTO.builder()
+                .id(updatedRoleUser.getId())
+                .name(updatedRoleUser.getName())
+                .email(updatedRoleUser.getEmail())
+                .role(updatedRoleUser.getRole())
+                .build();
+    }
 
-        String token = jwtProvider.generateToken(new UserPrincipal(user));
+    @Override
+    public UserDTO getCurrentUser(String token) {
+        String email = jwtProvider.extractUsername(token);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         UserDTO userDTO = UserDTO.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
                 .role(user.getRole())
-                .build();
+                .build();;
 
-        return new LoginResponse(token, userDTO);
+        if (userDTO.getRole() == Role.BARBER) {
+            userDTO =  BarberDTO.builder()
+                    .id(user.getId())
+                    .name(user.getName())
+                    .email(user.getEmail())
+                    .role(user.getRole())
+                    .isBarberProfileUpdated(user.isBarberProfileUpdated())
+                    .build();;
+        }
+
+        return userDTO;
     }
 
 

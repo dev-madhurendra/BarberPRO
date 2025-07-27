@@ -1,5 +1,6 @@
 package com.barbershop.api.service.serviceImpl;
 
+import com.barbershop.api.exception.AppException;
 import com.barbershop.api.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -33,7 +34,7 @@ public class EmailServiceImpl implements EmailService {
             mailSender.send(message);
 
         } catch (MessagingException e) {
-            throw new RuntimeException(FAILED_TO_SEND_TOP, e);
+            throw new AppException(FAILED_TO_SEND_TOP);
         }
     }
 }

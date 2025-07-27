@@ -25,4 +25,13 @@ public interface ResponseMessageConstants {
     String RESPONSE_BARBER_SEARCHED = "Barbers found successfully.";
     String RESPONSE_BARBER_DELETED = "Barber profile deleted successfully.";
     String RESPONSE_BARBER_PROFILE_NOT_FOUND = "Barber profile not found";
+
+    String CHANGE_ROLE_DESCRIPTION = "Update user role to BARBER";
+    String CHANGE_ROLE_SUCCESS_MESSAGE = "Role updated successfully";
+
+    String GOOGLE_LOGIN_SUCCESS_MESSAGE = "Google login successful";
+    String GOOGLE_LOGIN_INVALID_REQUEST = "Invalid request parameters";
+
+    String RESET_PASSWORD_SUCCESS_MESSAGE = "Password reset successful";
+    String RESET_PASSWORD_INVALID_REQUEST = "Invalid OTP or request data";
 }

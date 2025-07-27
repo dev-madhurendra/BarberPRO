@@ -9,7 +9,7 @@ import lombok.Data;
 @Builder
 public class BarberProfileResponse {
     private Long id;
-    private UserDTO userDTO;
+    private BarberDTO barberDTO;
     private String shopName;
     private String phoneNumber;
     private String address;

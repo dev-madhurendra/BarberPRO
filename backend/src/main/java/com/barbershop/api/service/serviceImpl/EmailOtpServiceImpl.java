@@ -2,6 +2,7 @@ package com.barbershop.api.service.serviceImpl;
 
 import com.barbershop.api.dto.response.VerificationResponse;
 import com.barbershop.api.entity.User;
+import com.barbershop.api.exception.AppException;
 import com.barbershop.api.repository.UserRepository;
 import com.barbershop.api.security.CustomUserDetailsService;
 import com.barbershop.api.security.JwtProvider;
@@ -30,28 +31,28 @@ public class EmailOtpServiceImpl implements OtpService {
     @Override
     public String sendOtp(String destination) {
         User user = userRepository.findByEmail(destination)
-                .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND_WITH_EMAIL + destination));
+                .orElseThrow(() -> new AppException(USER_NOT_FOUND_WITH_EMAIL + destination));
 
         String otp = OtpUtils.generateOtp();
+
+        emailService.sendOtpEmail(destination, otp);
         user.setOtp(otp);
         user.setOtpExpiry(LocalDateTime.now().plusMinutes(5));
         userRepository.save(user);
-
-        emailService.sendOtpEmail(destination, otp);
 
         return OTP_SENT_TO_EMAIL + destination;
     }
 
     public VerificationResponse verifyOtp(String destination, String otp) {
         User user = userRepository.findByEmail(destination)
-                .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND_WITH_EMAIL + destination));
+                .orElseThrow(() -> new AppException(USER_NOT_FOUND_WITH_EMAIL + destination));
 
         if (user.getOtp() == null || user.getOtpExpiry().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException(RESPONSE_MESSAGE_OTP_INVALID);
+            throw new AppException(RESPONSE_MESSAGE_OTP_INVALID);
         }
 
         if (!user.getOtp().equals(otp)) {
-            throw new RuntimeException(RESPONSE_MESSAGE_OTP_INVALID);
+            throw new AppException(RESPONSE_MESSAGE_OTP_INVALID);
         }
 
         user.setVerified(true);
