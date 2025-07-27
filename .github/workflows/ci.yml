@@ -23,7 +23,8 @@ jobs:
       - name: 🛠️ Build with Maven
         run: |
           cd backend
-          ./mvnw clean install -DskipTests
+          mvn clean install -DskipTests
+
 
   build-frontend:
     name: 🌐 Build React Frontend
