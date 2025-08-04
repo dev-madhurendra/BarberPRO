@@ -11,7 +11,8 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "test:sonar": "vitest run --reporter=junit --outputFile=coverage/test-report.xml"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

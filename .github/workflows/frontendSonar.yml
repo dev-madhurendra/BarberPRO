@@ -49,6 +49,11 @@ jobs:
         env:
           CI: true
       
+      - name: Generate test execution report
+        run: npm run test:sonar
+        env:
+          CI: true
+      
       - name: Build application
         run: npm run build
       
