@@ -1,4 +1,4 @@
-name: SonarCloud Backend
+name: Backend SonarCloud Analysis
 
 on:
   push:
