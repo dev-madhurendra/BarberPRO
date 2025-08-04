@@ -60,6 +60,6 @@ jobs:
           mvn -B clean verify
           sonar:sonar
           -Dsonar.projectKey=dev-madhurendra_BarberPRO
-          -Dsonar.organization=your_org_name
+          -Dsonar.organization=dev-madhurendra
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.login=${{ secrets.BARBER_PRO_SONAR_TOKEN }}
