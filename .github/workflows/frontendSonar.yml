@@ -23,6 +23,8 @@ jobs:
        (startsWith(github.head_ref, 'FE_') || 
         startsWith(github.head_ref, 'feature/') ||
         startsWith(github.head_ref, 'BE_FE_') ||
+        startsWith(github.head_ref, 'Doc_') ||
+        startsWith(github.head_ref, 'FE_BE_') ||
         startsWith(github.head_ref, 'bugfix/')))
     
     defaults:

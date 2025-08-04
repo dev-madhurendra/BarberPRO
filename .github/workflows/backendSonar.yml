@@ -17,7 +17,10 @@ jobs:
     if: >
       (github.event_name == 'push') ||
       (github.event_name == 'pull_request' &&
-      (startsWith(github.head_ref, 'BE_') || startsWith(github.head_ref, 'BE_FE_')) &&
+      (startsWith(github.head_ref, 'BE_') || 
+      startsWith(github.head_ref, 'BE_FE_' || 
+      startsWith(github.head_ref, 'Doc_') ||
+      startsWith(github.head_ref, 'FE_BE_'))) &&
       github.event.pull_request.merged == false)
     name: BE BarberPRO Services Sonar Analysis
     runs-on: ubuntu-latest
