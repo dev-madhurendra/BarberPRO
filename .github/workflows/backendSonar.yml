@@ -14,14 +14,22 @@ on:
 
 jobs:
   backend-sonar-analysis:
-    if: |
-      (github.event_name == 'push') ||
-      (github.event_name == 'pull_request' &&
-      (startsWith(github.head_ref, 'BE_') || 
-      startsWith(github.head_ref, 'BE_FE_') || 
-      startsWith(github.head_ref, 'Doc_') ||
-      startsWith(github.head_ref, 'FE_BE_')) &&
-      github.event.pull_request.merged == false)
+    if: >
+      github.event_name == 'push' ||
+      (
+        github.event_name == 'pull_request' &&
+        (
+          startsWith(github.head_ref, 'BE_') ||
+          startsWith(github.head_ref, 'feature/') ||
+          startsWith(github.head_ref, 'BE_FE_') ||
+          startsWith(github.head_ref, 'Doc_') ||
+          startsWith(github.head_ref, 'FE_BE_') ||
+          startsWith(github.head_ref, 'bugfix/')
+        ) &&
+        github.event.pull_request.merged == false
+      )
+
+
     name: BE BarberPRO Services Sonar Analysis
     runs-on: ubuntu-latest
     timeout-minutes: 8
