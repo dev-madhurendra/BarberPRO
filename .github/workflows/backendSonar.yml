@@ -63,3 +63,11 @@ jobs:
           -Dsonar.organization=dev-madhurendra
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.login=${{ secrets.BARBER_PRO_SONAR_TOKEN }}
+
+
+      - name: 🔁 Reuse Screenshot Workflow
+        uses: ./.github/workflows/update-sonar-screenshot.yml
+        with:
+          project_url: 'https://sonarcloud.io/summary/overall?id=dev-madhurendra_BarberPRO&branch=main'
+          image_path: 'assets/sonar-backend-report.png'
+          image_tag: 'Sonar Backend Report'
