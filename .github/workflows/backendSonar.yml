@@ -69,7 +69,7 @@ jobs:
 
 
       - name: 🔁 Reuse Screenshot Workflow
-        uses: ./.github/workflows/update-sonar-screenshot.yml
+        uses:  dev-madhurendra/BarberPRO/.github/workflows/update-sonar-screenshot.yml@main
         with:
           project_url: 'https://sonarcloud.io/summary/overall?id=dev-madhurendra_BarberPRO&branch=main'
           image_path: 'assets/sonar-backend-report.png'
