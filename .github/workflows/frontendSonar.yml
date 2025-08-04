@@ -5,18 +5,23 @@ on:
     branches:
       - main
       - develop
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontendSonar.yml"
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
       - main
       - develop
+    paths:
+      - "frontend/**"
 
 jobs:
   sonarcloud:
     name: SonarCloud Analysis
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    
+
     if: >
       github.event_name == 'push' ||
       (
@@ -32,35 +37,34 @@ jobs:
         github.event.pull_request.merged == false
       )
 
-    
     defaults:
       run:
         working-directory: ./frontend
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  
-      
+          fetch-depth: 0
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
           cache-dependency-path: './frontend/package-lock.json'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run tests with coverage
         run: npm run test:coverage
         env:
           CI: true
-      
+
       - name: Build application
         run: npm run build
-      
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
@@ -68,9 +72,9 @@ jobs:
           SONAR_TOKEN: ${{ secrets.BARBER_PRO_SONAR_TOKEN_FRONTEND }}
         with:
           projectBaseDir: ./frontend
-          
+
       - name: 🔁 Reuse Screenshot Workflow
-        uses:  dev-madhurendra/BarberPRO/.github/workflows/update-sonar-screenshot.yml@main
+        uses: dev-madhurendra/BarberPRO/.github/workflows/update-sonar-screenshot.yml@main
         with:
           project_url: 'https://sonarcloud.io/summary/overall?id=dev-madhurendra_barberpro-frontend&branch=main'
           image_path: 'assets/sonar-frontend-report.png'

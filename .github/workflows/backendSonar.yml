@@ -4,13 +4,19 @@ on:
   push:
     branches:
       - main
+      - 'BE_*'
+      - 'FE_*'
+      - 'BE_FE_*'
+      - 'FE_BE_*'
+      - 'Doc_*'
+      - 'feature/**'
+      - 'bugfix/**'
     paths:
       - "backend/**"
       - ".github/workflows/backendSonar.yml"
+
   pull_request:
     types: [opened, synchronize, reopened]
-    paths:
-      - "backend/**"
 
 jobs:
   backend-sonar-analysis:
@@ -28,7 +34,6 @@ jobs:
         ) &&
         github.event.pull_request.merged == false
       )
-
 
     name: BE BarberPRO Services Sonar Analysis
     runs-on: ubuntu-latest
@@ -67,17 +72,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.BARBER_PRO_SONAR_TOKEN }}
-        run: >
-          mvn -B clean verify
-          sonar:sonar
-          -Dsonar.projectKey=dev-madhurendra_BarberPRO
-          -Dsonar.organization=dev-madhurendra
-          -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.login=${{ secrets.BARBER_PRO_SONAR_TOKEN }}
-
+        run: |
+          mvn -B clean verify sonar:sonar \
+            -Dsonar.projectKey=dev-madhurendra_BarberPRO \
+            -Dsonar.organization=dev-madhurendra \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.BARBER_PRO_SONAR_TOKEN }}
 
       - name: 🔁 Reuse Screenshot Workflow
-        uses:  dev-madhurendra/BarberPRO/.github/workflows/update-sonar-screenshot.yml@main
+        uses: ./.github/actions/update-sonar-screenshot
         with:
           project_url: 'https://sonarcloud.io/summary/overall?id=dev-madhurendra_BarberPRO&branch=main'
           image_path: 'assets/sonar-backend-report.png'
