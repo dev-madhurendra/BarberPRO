@@ -135,6 +135,13 @@ jobs:
 ```
 
 ---
+## 🧪 Coverage Report
+
+> Frontend:
+> **https://sonarcloud.io/summary/overall?id=dev-madhurendra_barberpro-frontend&branch=main**
+
+> Backend:
+> **https://sonarcloud.io/summary/overall?id=dev-madhurendra_BarberPRO&branch=main**
 
 ## 📄 API Documentation
 
