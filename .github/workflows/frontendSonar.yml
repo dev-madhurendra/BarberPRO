@@ -72,10 +72,3 @@ jobs:
           SONAR_TOKEN: ${{ secrets.BARBER_PRO_SONAR_TOKEN_FRONTEND }}
         with:
           projectBaseDir: ./frontend
-
-      - name: 🔁 Reuse Screenshot Workflow
-        uses: dev-madhurendra/BarberPRO/.github/workflows/update-sonar-screenshot.yml@main
-        with:
-          project_url: 'https://sonarcloud.io/summary/overall?id=dev-madhurendra_barberpro-frontend&branch=main'
-          image_path: 'assets/sonar-frontend-report.png'
-          image_tag: 'Sonar Frontend Report'
