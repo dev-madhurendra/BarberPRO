@@ -78,11 +78,11 @@ jobs:
           GOOGLE_AUTH_CLIENT_ID: ${{ secrets.GOOGLE_AUTH_CLIENT_ID }}
           GOOGLE_AUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_AUTH_CLIENT_SECRET }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          
+          JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
         run: >
           mvn -B clean verify
           sonar:sonar
           -Dsonar.projectKey=dev-madhurendra_BarberPRO
           -Dsonar.organization=dev-madhurendra
           -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.login=${{ secrets.BARBER_PRO_SONAR_TOKEN }}
+          -Dsonar.login=${{ env.SONAR_TOKEN }}
