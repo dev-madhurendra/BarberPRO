@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+      - 'BE_*'
+      - 'FE_*'
+      - 'BE_FE_*'
+      - 'FE_BE_*'
+      - 'Doc_*'
+      - 'feature/**'
+      - 'bugfix/**'
     paths:
       - "backend/**"
       - ".github/workflows/backendSonar.yml"
@@ -15,10 +22,20 @@ on:
 jobs:
   backend-sonar-analysis:
     if: >
-      (github.event_name == 'push') ||
-      (github.event_name == 'pull_request' &&
-      startsWith(github.head_ref, 'BE_') &&
-      github.event.pull_request.merged == false)
+      github.event_name == 'push' ||
+      (
+        github.event_name == 'pull_request' &&
+        (
+          startsWith(github.head_ref, 'BE_') ||
+          startsWith(github.head_ref, 'feature/') ||
+          startsWith(github.head_ref, 'BE_FE_') ||
+          startsWith(github.head_ref, 'Doc_') ||
+          startsWith(github.head_ref, 'FE_BE_') ||
+          startsWith(github.head_ref, 'bugfix/')
+        ) &&
+        github.event.pull_request.merged == false
+      )
+      
     name: BE BarberPRO Services Sonar Analysis
     runs-on: ubuntu-latest
     timeout-minutes: 8
@@ -61,6 +78,7 @@ jobs:
           GOOGLE_AUTH_CLIENT_ID: ${{ secrets.GOOGLE_AUTH_CLIENT_ID }}
           GOOGLE_AUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_AUTH_CLIENT_SECRET }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          
         run: >
           mvn -B clean verify
           sonar:sonar
