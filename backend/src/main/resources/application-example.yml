@@ -6,9 +6,9 @@ spring:
     import: optional:file:.env[.properties]
 
   datasource:
-    url: jdbc:postgresql://localhost:3000/barber_token_db
-    username: postgres
-    password: admin
+    url: jdbc:postgresql://localhost:5432/sample_db
+    username: sample_user
+    password: sample_pass
 
   jpa:
     hibernate:
@@ -19,10 +19,10 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
   mail:
-    host: smtp.gmail.com
+    host: smtp.example.com
     port: 587
-    username: dev.madhurendra@gmail.com
-    password: smyh tuia uwfo titv
+    username: your_email@example.com
+    password: email_password
     properties:
       mail:
         smtp:
@@ -30,14 +30,13 @@ spring:
           starttls:
             enable: true
 
-
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id: 70964715954-comus2knhoh30fponnlu9lfh27on6ama.apps.googleusercontent.com
-            client-secret: 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
+            client-id: your-google-client-id
+            client-secret: your-google-client-secret
             scope:
               - email
               - profile
@@ -48,9 +47,8 @@ spring:
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
             user-name-attribute: sub
 
-
 jwt:
-  secret: 3xAmPl3SeCuR3KeYth@t_iS_AtLeAst32Ch@rs
+  secret: dummy_jwt_secret_key_that_is_at_least_32_chars
   expiration: 3600000
 
 cors:

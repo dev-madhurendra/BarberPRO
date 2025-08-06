@@ -1,14 +1,14 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT}
 
 spring:
   config:
     import: optional:file:.env[.properties]
 
   datasource:
-    url: jdbc:postgresql://localhost:3000/barber_token_db
-    username: postgres
-    password: admin
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
@@ -21,8 +21,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: dev.madhurendra@gmail.com
-    password: idlg bcep xlty xxbi
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_APP_PASSWORD}
     properties:
       mail:
         smtp:
@@ -35,8 +35,8 @@ spring:
       client:
         registration:
           google:
-            client-id: 70964715954-comus2knhoh30fponnlu9lfh27on6ama.apps.googleusercontent.com
-            client-secret: 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
+            client-id: ${GOOGLE_AUTH_CLIENT_ID}
+            client-secret: ${GOOGLE_AUTH_CLIENT_SECRET}
             scope:
               - email
               - profile
@@ -49,8 +49,8 @@ spring:
 
 
 jwt:
-  secret: 3xAmPl3SeCuR3KeYth@t_iS_AtLeAst32Ch@rs
-  expiration: 3600000
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
 
 cors:
   allowed-origins: http://localhost:5173,http://127.0.0.1:5173
