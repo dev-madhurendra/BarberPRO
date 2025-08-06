@@ -4,17 +4,9 @@ on:
   push:
     branches:
       - main
-      - 'BE_*'
-      - 'FE_*'
-      - 'BE_FE_*'
-      - 'FE_BE_*'
-      - 'Doc_*'
-      - 'feature/**'
-      - 'bugfix/**'
     paths:
       - "backend/**"
       - ".github/workflows/backendSonar.yml"
-
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -23,20 +15,10 @@ on:
 jobs:
   backend-sonar-analysis:
     if: >
-      github.event_name == 'push' ||
-      (
-        github.event_name == 'pull_request' &&
-        (
-          startsWith(github.head_ref, 'BE_') ||
-          startsWith(github.head_ref, 'feature/') ||
-          startsWith(github.head_ref, 'BE_FE_') ||
-          startsWith(github.head_ref, 'Doc_') ||
-          startsWith(github.head_ref, 'FE_BE_') ||
-          startsWith(github.head_ref, 'bugfix/')
-        ) &&
-        github.event.pull_request.merged == false
-      )
-
+      (github.event_name == 'push') ||
+      (github.event_name == 'pull_request' &&
+      startsWith(github.head_ref, 'BE_') &&
+      github.event.pull_request.merged == false)
     name: BE BarberPRO Services Sonar Analysis
     runs-on: ubuntu-latest
     timeout-minutes: 8
@@ -74,14 +56,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.BARBER_PRO_SONAR_TOKEN }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
+          EMAIL_APP_PASSWORD: ${{ secrets.EMAIL_APP_PASSWORD }}
+          GOOGLE_AUTH_CLIENT_ID: ${{ secrets.GOOGLE_AUTH_CLIENT_ID }}
+          GOOGLE_AUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_AUTH_CLIENT_SECRET }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          
         run: >
           mvn -B clean verify
           sonar:sonar
@@ -89,4 +68,3 @@ jobs:
           -Dsonar.organization=dev-madhurendra
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.login=${{ secrets.BARBER_PRO_SONAR_TOKEN }}
-
