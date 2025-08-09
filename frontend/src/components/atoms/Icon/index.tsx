@@ -11,7 +11,7 @@ interface IIcon {
 
 const Icon: React.FC<IIcon> = ({ icon: IconComp, size, color, onClick }) => {
   return (
-    <StyledIcon size={size} color={color} onClick={onClick}>
+    <StyledIcon size={size} color={color} onClick={onClick} data-testid="styled-icon">
       <IconComp />
     </StyledIcon>
   );

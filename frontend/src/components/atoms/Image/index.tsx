@@ -22,9 +22,9 @@ const Image: React.FC<IImage> = ({
   ...props
 }) => {
   return (
-    <ImageWrapper width={width} height={height} rounded={rounded} circle={circle}>
+    <ImageWrapper data-testid="image-wrapper" width={width} height={height} rounded={rounded} circle={circle}>
       <StyledImage {...props} cover={cover} />
-      {overlay && <Overlay />}
+      {overlay && <Overlay data-testid="overlay" />}
       {overlayContent && <OverlayContent>{overlayContent}</OverlayContent>}
     </ImageWrapper>
   );

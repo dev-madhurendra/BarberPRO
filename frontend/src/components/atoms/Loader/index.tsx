@@ -8,7 +8,7 @@ interface ILoader {
 const OAuthLoader: React.FC<ILoader> = ({ loading = true }) => {
   return (
     <Wrapper>
-      <Spinner />
+      <Spinner data-testid="loader" />
       <Message>{loading ? "Authenticating with Google..." : "Redirecting..."}</Message>
       <SubText>Please wait while we set up your account and route you.</SubText>
     </Wrapper>

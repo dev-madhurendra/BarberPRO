@@ -6,7 +6,7 @@ import { LogoWrapper } from "./index.styles";
 export const Logo = () => {
   return (
     <LogoWrapper>
-      <FaCut />
+      <FaCut data-testid="scissor-icon" />
       Barber
       <Typography
         as="h1"

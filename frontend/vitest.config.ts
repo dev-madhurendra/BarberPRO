@@ -23,7 +23,10 @@ export default defineConfig({
         '**/build/**',
         '**/*.stories.*',
         '**/index.ts',
-        '**/index.tsx'
+        '**/index.tsx',
+         ".storybook/",
+         "**/styles/**",
+         "**/utils/**"
       ],
       thresholds: {
         global: {
