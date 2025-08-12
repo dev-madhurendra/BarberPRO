@@ -5,6 +5,7 @@ import { FaBeer } from "react-icons/fa";
 import { ThemeProvider } from "styled-components";
 import { describe, expect, it, vi } from "vitest";
 import { DefaultTheme } from "styled-components/dist/types";
+import { STYLED_ICON_TEST_ID } from "../../../utils/constants";
 const mockTheme = {
   colors: {
     textPrimary: "black",
@@ -22,13 +23,13 @@ const renderWithTheme = (iconUIComp: React.ReactNode) => {
 describe("Icon component", () => {
   it("should render the passed icon component", () => {
     renderWithTheme(<Icon icon={FaBeer} />);
-    const svgElement = screen.getByTestId("styled-icon").querySelector("svg");
+    const svgElement = screen.getByTestId(STYLED_ICON_TEST_ID).querySelector("svg");
     expect(svgElement).toBeInTheDocument();
   });
 
   it("should apply size and color props to the SVG", () => {
     renderWithTheme(<Icon icon={FaBeer} size="32px" color="red" />);
-    const svgElement = screen.getByTestId("styled-icon").querySelector("svg")!;
+    const svgElement = screen.getByTestId(STYLED_ICON_TEST_ID).querySelector("svg")!;
     expect(svgElement).toHaveStyle({
       width: "32px",
       height: "32px",
@@ -39,13 +40,13 @@ describe("Icon component", () => {
   it("should call onClick when clicked", () => {
     const handleClick = vi.fn();
     renderWithTheme(<Icon icon={FaBeer} onClick={handleClick} />);
-    fireEvent.click(screen.getByTestId("styled-icon"));
+    fireEvent.click(screen.getByTestId(STYLED_ICON_TEST_ID));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
   it("should render without optional props using theme defaults", () => {
     renderWithTheme(<Icon icon={FaBeer} />);
-    const svgElement = screen.getByTestId("styled-icon").querySelector("svg");
+    const svgElement = screen.getByTestId(STYLED_ICON_TEST_ID).querySelector("svg");
     expect(svgElement).toHaveStyle({
       width: "24px",
       height: "24px",

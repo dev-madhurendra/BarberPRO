@@ -4,6 +4,7 @@ import { describe, it, expect } from "vitest";
 import { Logo } from "./index";
 import { theme } from "../../../styles/theme";
 import { ThemeProvider } from "styled-components";
+import { SCISSOR_ICON_TEST_ID } from "../../../utils/constants";
 
 const renderWithTheme = (iconUIComp: React.ReactNode) => {
     return render(<ThemeProvider theme={theme}>{iconUIComp}</ThemeProvider>);
@@ -12,7 +13,7 @@ const renderWithTheme = (iconUIComp: React.ReactNode) => {
 describe("Logo component", () => {
   it("should render the scissor icon", () => {
     renderWithTheme(<Logo />);
-    const svg = screen.getByTestId("scissor-icon");
+    const svg = screen.getByTestId(SCISSOR_ICON_TEST_ID);
     expect(svg).toBeInTheDocument();
   });
 
@@ -34,7 +35,7 @@ describe("Logo component", () => {
 
   it("should apply correct styles to the svg icon", () => {
     renderWithTheme(<Logo />);
-    const svg = screen.getByTestId("scissor-icon");
+    const svg = screen.getByTestId(SCISSOR_ICON_TEST_ID);
     expect(svg).toHaveStyle(`font-size: 2rem`);
     expect(svg).toHaveStyle(`color: ${theme.colors.accent}`);
   });

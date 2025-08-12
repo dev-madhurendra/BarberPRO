@@ -4,6 +4,7 @@ import { describe, it, expect } from "vitest";
 import Image from "./index";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../../../styles/theme";
+import { OVERLAY_TEST_ID, OVERLAY_TEXT, IMAGE_WRAPPER_TEST_ID } from "../../../utils/constants";
 
 const renderWithTheme = (iconUIComp: React.ReactNode) => {
   return render(<ThemeProvider theme={theme}>{iconUIComp}</ThemeProvider>);
@@ -26,8 +27,8 @@ describe("Image component", () => {
         overlayContent={<span>Overlay Text</span>}
       />
     );
-    expect(screen.getByTestId("overlay")).toBeInTheDocument();
-    expect(screen.getByText("Overlay Text")).toBeInTheDocument();
+    expect(screen.getByTestId(OVERLAY_TEST_ID)).toBeInTheDocument();
+    expect(screen.getByText(OVERLAY_TEXT)).toBeInTheDocument();
   });
 
   it("applies styles for width, height, rounded, circle", () => {
@@ -41,7 +42,7 @@ describe("Image component", () => {
         circle
       />
     );
-    const wrapper = screen.getByTestId("image-wrapper"); // see below for adding this
+    const wrapper = screen.getByTestId(IMAGE_WRAPPER_TEST_ID); // see below for adding this
     expect(wrapper).toHaveStyle({
       width: "100px",
       height: "150px",
@@ -52,7 +53,7 @@ describe("Image component", () => {
     const { getByTestId } = render(
       <Image rounded={true} circle={false} src="test.jpg" alt="Test image" />
     );
-    const wrapper = getByTestId("image-wrapper");
+    const wrapper = getByTestId(IMAGE_WRAPPER_TEST_ID);
     expect(wrapper).toHaveStyle("border-radius: 12px");
   });
 
@@ -60,7 +61,7 @@ describe("Image component", () => {
     const { getByTestId } = render(
       <Image rounded={false} circle={false} src="test.jpg" alt="Test image" />
     );
-    const wrapper = getByTestId("image-wrapper");
+    const wrapper = getByTestId(IMAGE_WRAPPER_TEST_ID);
     expect(wrapper).toHaveStyle("border-radius: 0");
   });
 

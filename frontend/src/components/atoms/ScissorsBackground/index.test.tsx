@@ -4,11 +4,11 @@ import { describe, it, expect } from "vitest";
 
 import ScissorsBackground from "./index";
 
-import { SCISSORS_COUNT } from "../../../utils/constants";
+import { SCISSORS_COUNT, SCISSORS_WRAPPER_TEST_ID } from "../../../utils/constants";
 describe("ScissorsBackground component", () => {
   it("should render the ScissorsWrapper container", () => {
     render(<ScissorsBackground />);
-    const wrapper = screen.getByTestId("scissors-wrapper");
+    const wrapper = screen.getByTestId(SCISSORS_WRAPPER_TEST_ID);
     expect(wrapper).toBeInTheDocument();
   });
 

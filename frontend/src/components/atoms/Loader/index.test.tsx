@@ -4,6 +4,7 @@ import { describe, it, expect } from "vitest";
 import OAuthLoader from "./index";
 import { ThemeProvider } from "styled-components";
 import  {theme } from "../../../styles/theme";
+import { LOADER_TEST_ID } from "../../../utils/constants";
 
 const renderWithTheme = (iconUIComp: React.ReactNode) => {
   return render(<ThemeProvider theme={theme}>{iconUIComp}</ThemeProvider>);
@@ -42,7 +43,7 @@ describe("OAuthLoader Component", () => {
 
   it("should renders spinner with correct border color", () => {
     renderWithTheme(<OAuthLoader />);
-    const spinner = screen.getByTestId("loader");
+    const spinner = screen.getByTestId(LOADER_TEST_ID);
     expect(spinner).toHaveStyle(
       `border: 4px solid ${theme.colors.primary}`
     );
