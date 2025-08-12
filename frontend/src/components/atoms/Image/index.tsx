@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import { ImageWrapper, StyledImage, Overlay, OverlayContent } from "./index.styles";
+import { IMAGE_WRAPPER_TEST_ID, OVERLAY_TEST_ID } from "../../../utils/constants";
 
 interface IImage extends React.ImgHTMLAttributes<HTMLImageElement> {
   width?: string;
@@ -22,9 +23,9 @@ const Image: React.FC<IImage> = ({
   ...props
 }) => {
   return (
-    <ImageWrapper width={width} height={height} rounded={rounded} circle={circle}>
+    <ImageWrapper data-testid={IMAGE_WRAPPER_TEST_ID} width={width} height={height} rounded={rounded} circle={circle}>
       <StyledImage {...props} cover={cover} />
-      {overlay && <Overlay />}
+      {overlay && <Overlay data-testid={OVERLAY_TEST_ID} />}
       {overlayContent && <OverlayContent>{overlayContent}</OverlayContent>}
     </ImageWrapper>
   );
