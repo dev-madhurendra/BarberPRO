@@ -39,9 +39,9 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
     try {
       role = (roleParam != null && !roleParam.isBlank())
         ? Role.valueOf(roleParam.toUpperCase())
-        : Role.CUSTOMER;
+        : Role.NOT_DEFINED;
     } catch (IllegalArgumentException e) {
-        role = Role.CUSTOMER;
+        role = Role.NOT_DEFINED;
     }
 
     Role finalRole = role;
