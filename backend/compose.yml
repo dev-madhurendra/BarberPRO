@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  barbar-shop:
+    image: aritraghorai/burbur-shop:latest
+    container_name: barbar-shop
+    # If you build locally from the Dockerfile in the repo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file: .env
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=75.0 -XX:+ExitOnOutOfMemoryError"
+      SERVER_PORT: "8080"
+      SPRING_APPLICATION_NAME: barbar-shop
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/actuator/health"] # requires Spring Boot Actuator
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    read_only: true
+    tmpfs:
+      - /tmp
+    restart: unless-stopped
