@@ -6,9 +6,9 @@ spring:
     import: optional:file:.env[.properties]
 
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://localhost:3000/barber_token_db
+    username: postgres
+    password: admin
 
   jpa:
     hibernate:
@@ -21,8 +21,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${EMAIL_USERNAME}
-    password: ${EMAIL_APP_PASSWORD}
+    username: dev.madhurendra@gmail.com
+    password: idlg bcep xlty xxbi
     properties:
       mail:
         smtp:
@@ -35,11 +35,13 @@ spring:
       client:
         registration:
           google:
-            client-id: ${GOOGLE_AUTH_CLIENT_ID}
-            client-secret: ${GOOGLE_AUTH_CLIENT_SECRET}
+            client-id: 70964715954-comus2knhoh30fponnlu9lfh27on6ama.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: http://localhost:5173/oauth2/callback
             scope:
               - email
               - profile
+
         provider:
           google:
             authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
@@ -47,10 +49,9 @@ spring:
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
             user-name-attribute: sub
 
-
 jwt:
-  secret: ${JWT_SECRET}
-  expiration: ${JWT_EXPIRATION}
+  secret: 3xAmPl3SeCuR3KeYth@t_iS_AtLeAst32Ch@rs
+  expiration: 3600000
 
 cors:
   allowed-origins: http://localhost:5173,http://127.0.0.1:5173

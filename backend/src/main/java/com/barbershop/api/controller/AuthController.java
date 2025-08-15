@@ -14,11 +14,15 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 import static com.barbershop.api.utils.ResponseCodeConstants.*;
 import static com.barbershop.api.utils.ResponseMessageConstants.*;
@@ -145,6 +149,5 @@ public class AuthController {
 
         return ResponseEntity.ok(ApiResponse.success("User details fetched successfully", userDTO));
     }
-
 
 }

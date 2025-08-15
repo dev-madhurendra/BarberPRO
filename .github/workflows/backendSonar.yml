@@ -4,13 +4,6 @@ on:
   push:
     branches:
       - main
-      - 'BE_*'
-      - 'FE_*'
-      - 'BE_FE_*'
-      - 'FE_BE_*'
-      - 'Doc_*'
-      - 'feature/**'
-      - 'bugfix/**'
     paths:
       - "backend/**"
       - ".github/workflows/backendSonar.yml"
@@ -80,6 +73,7 @@ jobs:
           GOOGLE_AUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_AUTH_CLIENT_SECRET }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
+          GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}
         run: >
           mvn -B clean verify
           sonar:sonar

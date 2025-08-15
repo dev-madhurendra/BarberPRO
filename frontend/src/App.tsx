@@ -9,6 +9,7 @@ import BarberDashboard from "./pages/Dashboard/Barber";
 import ProtectedRoute from "./routes/protectedRoutes";
 import NotFoundPage from "./pages/NotFound";
 import BarberProfileForm from "./components/molecules/BarberProfileForm";
+import OAuthCallback from "./pages/OAuthCallback";
 
 const router = createBrowserRouter([
   {
@@ -54,9 +55,13 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/oauth2/callback/*",
+    element: <OAuthCallback />
+  },
+  {
     path: "*",
     element: <NotFoundPage />,
-  },
+  }
 ]);
 
 function App() {

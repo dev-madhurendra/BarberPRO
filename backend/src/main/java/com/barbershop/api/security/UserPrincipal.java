@@ -31,6 +31,10 @@ public class UserPrincipal implements UserDetails {
         this.isBarberProfileUpdated = isBarberProfileUpdated;
     }
 
+    public static UserPrincipal create(User user) {
+      return new UserPrincipal(user, user.isBarberProfileUpdated());
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));

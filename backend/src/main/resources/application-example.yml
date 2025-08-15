@@ -37,9 +37,11 @@ spring:
           google:
             client-id: your-google-client-id
             client-secret: your-google-client-secret
+            redirect-uri: your-redirect-url
             scope:
               - email
               - profile
+
         provider:
           google:
             authorization-uri: https://accounts.google.com/o/oauth2/v2/auth

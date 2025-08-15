@@ -31,6 +31,9 @@ const LoginForm: React.FC<LoginFormProps> = ({
   onForgotPassword,
 }) => {
   const inputFields = LOGIN_FORM_INPUT_FIELDS(email, password);
+  const handleGoogleLogin = (role: string) => {
+    window.location.href = `http://localhost:8080/api/v1/oauth/google/init?role=${role}`;
+  };
 
   return (
     <form onSubmit={onSubmit}>
@@ -76,7 +79,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
       />
 
       <SocialLoginButtons
-        onGoogleClick={() => {console.log(role)}}
+        onGoogleClick={() => handleGoogleLogin(role)}
         onGithubClick={() => console.log("GitHub Login")}
         onTwitterClick={() => console.log("Twitter Login")}
       />

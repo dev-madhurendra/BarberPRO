@@ -2,5 +2,6 @@ package com.barbershop.api.enums;
 
 public enum Role {
     CUSTOMER,
-    BARBER
+    BARBER,
+    NOT_DEFINED
 }
