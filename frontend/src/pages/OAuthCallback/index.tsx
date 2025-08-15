@@ -20,11 +20,12 @@ const OAuthCallback: React.FC = () => {
 
     localStorage.setItem("token", token);
 
-    const handleRedirect = (role: string, isBarberProfileUpdated: boolean = false) => {
+    const handleRedirect = (role: string, isUpdated: boolean) => {
+
       if (role === "customer") {
         navigate("/customer/dashboard");
       } else if (role === "barber") {
-        if (isBarberProfileUpdated) {
+        if (isUpdated) {
           navigate("/barber/dashboard");
         } else {
           navigate("/barber/setup-profile");
@@ -35,21 +36,26 @@ const OAuthCallback: React.FC = () => {
     };
 
     getCurrentUser()
-      .then((res) => {
-        const backendRole = res.data.data.role?.toLowerCase();
+      .then(async (res) => {
 
-        if (backendRole === "not_defined" && preSelectedRole) {
-          updateRole(preSelectedRole)
-            .then(() => getCurrentUser())
-            .then((res2) => {
-              handleRedirect(preSelectedRole, res2.data.isBarberProfileUpdated);
-            });
-        } else {
-          handleRedirect(backendRole, res.data.isBarberProfileUpdated);
+        let role = res.data.data.role?.toLowerCase();
+        let isUpdated = res.data.data.barberProfileUpdated;
+
+
+        if (role === "not_defined" && preSelectedRole) {
+          await updateRole(preSelectedRole);
+
+          const res2 = await getCurrentUser();
+
+          role = res2.data.data.role?.toLowerCase();
+          isUpdated = res2.data.data.barberProfileUpdated;
+
         }
+
+        handleRedirect(role, isUpdated);
       })
       .catch((err) => {
-        console.error("OAuth error:", err);
+        console.error("[OAuthCallback] OAuth error:", err);
         navigate("/");
       })
       .finally(() => setLoading(false));
