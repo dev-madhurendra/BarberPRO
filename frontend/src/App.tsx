@@ -4,12 +4,12 @@ import "./App.css";
 import AuthContainer from "./components/organisms/AuthContainer";
 import AuthTemplate from "./templates/AuthTemplate";
 import { theme } from "./styles/theme";
-import CustomerDashboard from "./pages/Dashboard/Customer";
-import BarberDashboard from "./pages/Dashboard/Barber";
 import ProtectedRoute from "./routes/protectedRoutes";
 import NotFoundPage from "./pages/NotFound";
 import BarberProfileForm from "./components/molecules/BarberProfileForm";
 import OAuthCallback from "./pages/OAuthCallback";
+import { CustomerDashboard } from "./pages/Dashboard/Customer";
+import { BarberDashboard } from "./pages/Dashboard/Barber";
 
 const router = createBrowserRouter([
   {
@@ -55,7 +55,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/oauth2/callback/*",
+    path: "/oauth2/success/*",
     element: <OAuthCallback />
   },
   {
