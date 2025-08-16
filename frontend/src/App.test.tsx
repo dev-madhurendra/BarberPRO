@@ -27,8 +27,9 @@ vi.mock('react-router-dom', () => ({
 }))
 
 vi.mock('react-hot-toast', () => ({
-  Toaster: () => <div data-testid="toaster">Toaster</div>
+  Toaster: (props: any) => <div data-testid="toaster">Toaster</div>
 }))
+
 
 vi.mock('./components/organisms/AuthContainer', () => ({
   default: () => <div data-testid="auth-container">Auth Container</div>
@@ -41,12 +42,13 @@ vi.mock('./templates/AuthTemplate', () => ({
 }))
 
 vi.mock('./pages/Dashboard/Customer', () => ({
-  default: () => <div data-testid="customer-dashboard">Customer Dashboard</div>
+  CustomerDashboard: () => <div data-testid="customer-dashboard">Customer Dashboard</div>
 }))
 
 vi.mock('./pages/Dashboard/Barber', () => ({
-  default: () => <div data-testid="barber-dashboard">Barber Dashboard</div>
+  BarberDashboard: () => <div data-testid="barber-dashboard">Barber Dashboard</div>
 }))
+
 
 vi.mock('./routes/protectedRoutes', () => ({
   default: ({ children }: { children: React.ReactNode }) => (
