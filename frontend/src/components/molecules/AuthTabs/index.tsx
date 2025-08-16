@@ -1,7 +1,7 @@
 import React from "react";
 import { Tab, TabContainer } from "./index.styles";
 
-interface IAuthTabs {
+export interface IAuthTabs {
   activeRole: "customer" | "barber";
   onRoleChange: (role: "customer" | "barber") => void;
 }

@@ -26,3 +26,7 @@ export const IMAGE_WRAPPER_TEST_ID='image-wrapper';
 export const LOADER_TEST_ID='loader';
 export const SCISSORS_WRAPPER_TEST_ID='scissors-wrapper';
 export const OVERLAY_TEXT="Overlay Text";
+export const RESET_PASSWORD_FORM='reset password form';
+export const REGISTER_FORM="register form";
+export const FORGOT_PASSWORD_FORM='forgot password form';
+export const VERIFY_OTP_FORM="verify otp form";

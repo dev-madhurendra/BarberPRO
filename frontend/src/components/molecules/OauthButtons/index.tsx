@@ -24,13 +24,14 @@ const SocialLoginButtons: React.FC<SocialLoginButtonsProps> = ({
   return (
     <>
       <Divider>{title}</Divider>
-      <SocialButtons>
+      <SocialButtons data-testid="social-buttons">
         {socialButtons.map((btn, index) => (
           <button
             key={index}
             type="button"
             onClick={btn.onClick}
             className={btn.className}
+            
           >
             {btn.icon}
           </button>

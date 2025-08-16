@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Typography from "../../atoms/Typography";
 import Button from "../../atoms/Button";
 import { OtpContainer, OtpInput } from "./index.styles";
+import { VERIFY_OTP_FORM } from "../../../utils/constants";
 
 interface VerifyOtpFormProps {
   otp: string;
@@ -52,7 +53,7 @@ const VerifyOtpForm: React.FC<VerifyOtpFormProps> = ({
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} aria-label={VERIFY_OTP_FORM}>
       <Typography text="Enter OTP" variant="sm" weight="medium" />
       <OtpContainer>
         {otpArray.map((digit, index) => (

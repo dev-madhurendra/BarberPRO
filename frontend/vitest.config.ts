@@ -22,11 +22,11 @@ export default defineConfig({
         '**/.next/**',
         '**/build/**',
         '**/*.stories.*',
-        '**/index.ts',
-        '**/index.tsx',
          ".storybook/",
          "**/styles/**",
-         "**/utils/**"
+         "**/utils/**",
+         "**/*.test.tsx",
+          "**/*.test.ts",
       ],
       thresholds: {
         global: {
