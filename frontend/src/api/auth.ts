@@ -1,6 +1,7 @@
-import axios from "axios";
-import { API_BASE } from "../utils/constants";
-import { BarberProfileRequest } from "../utils/requestsInterface";
+import axios from 'axios';
+import { API_BASE } from '../utils/constants';
+import { BarberProfileRequest } from '../utils/requestsInterface';
+import useAuthStore from '../store/AuthStore';
 
 export const registerUser = async (data: {
   name: string;
@@ -35,8 +36,8 @@ export const resetPassword = async (data: {
   return await axios.post(`${API_BASE}/auth/reset-password`, data);
 };
 
-export const saveBarberProfile = async (data: BarberProfileRequest) => {
-  const token = localStorage.getItem("token");
+export const saveBarberProfile = (data: BarberProfileRequest) => {
+  const token = useAuthStore.getState().token;
   return axios.post(`${API_BASE}/barbers`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -44,9 +45,8 @@ export const saveBarberProfile = async (data: BarberProfileRequest) => {
   });
 };
 
-
-export const updateRole = async (newRole: string) => {
-  const token = localStorage.getItem("token");
+export const updateRole = (newRole: string) => {
+  const token = useAuthStore.getState().token;
   return axios.post(
     `${API_BASE}/auth/change-role`,
     { role: newRole.toUpperCase() },
@@ -58,8 +58,8 @@ export const updateRole = async (newRole: string) => {
   );
 };
 
-export const getCurrentUser = async () => {
-  const token = localStorage.getItem("token");
+export const getCurrentUser = () => {
+  const token = useAuthStore.getState().token;
   return axios.get(`${API_BASE}/auth/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -67,9 +67,6 @@ export const getCurrentUser = async () => {
   });
 };
 
-
 export const findUserByEmail = async (email: string) => {
-  return await axios.get(
-    `${API_BASE}/user?email=${email}`
-  );
+  return await axios.get(`${API_BASE}/user?email=${email}`);
 };
