@@ -1,32 +1,32 @@
-import React from "react";
-import Typography from "../../atoms/Typography";
-import { useAuthForm } from "../../../hooks/useAuthForm";
-import LoginForm from "../../molecules/LoginForm";
-import RegisterForm from "../../molecules/RegisterForm";
-import VerifyOtpForm from "../../molecules/VerifyOtpForm";
-import ForgotPasswordForm from "../../molecules/ForgotForm";
-import ResetPasswordForm from "../../molecules/ResetPasswordForm";
-import { GET_AUTH_HEADING } from "../../../utils/functionConfig";
+import React from 'react';
+import Typography from '../../atoms/Typography';
+import { useAuthForm } from '../../../hooks/useAuthForm';
+import LoginForm from '../../molecules/LoginForm';
+import RegisterForm from '../../molecules/RegisterForm';
+import VerifyOtpForm from '../../molecules/VerifyOtpForm';
+import ForgotPasswordForm from '../../molecules/ForgotForm';
+import ResetPasswordForm from '../../molecules/ResetPasswordForm';
+import { GET_AUTH_HEADING } from '../../../utils/functionConfig';
 
-interface AuthFormProps {
-  role: "customer" | "barber";
+type AuthFormProps = {
+  role: 'customer' | 'barber';
   mode:
-    | "login"
-    | "register"
-    | "verifyOtp"
-    | "forgotPassword"
-    | "resetOtp"
-    | "resetPassword";
+    | 'login'
+    | 'register'
+    | 'verifyOtp'
+    | 'forgotPassword'
+    | 'resetOtp'
+    | 'resetPassword';
   setAuthMode: (
     mode:
-      | "login"
-      | "register"
-      | "verifyOtp"
-      | "forgotPassword"
-      | "resetOtp"
-      | "resetPassword"
+      | 'login'
+      | 'register'
+      | 'verifyOtp'
+      | 'forgotPassword'
+      | 'resetOtp'
+      | 'resetPassword'
   ) => void;
-}
+};
 
 const AuthForm: React.FC<AuthFormProps> = ({ role, mode, setAuthMode }) => {
   const {
@@ -42,72 +42,72 @@ const AuthForm: React.FC<AuthFormProps> = ({ role, mode, setAuthMode }) => {
     <>
       <Typography
         as="h2"
+        style={{ margin: '24px 0 16px' }}
+        text={GET_AUTH_HEADING(role, mode)}
         variant="xl"
         weight="bold"
-        style={{ margin: "24px 0 16px" }}
-        text={GET_AUTH_HEADING(role, mode)}
       />
 
-      {mode === "login" && (
+      {mode === 'login' && (
         <LoginForm
           email={formData.email}
-          password={formData.password}
-          isLoading={isLoading}
           error={error}
-          role={role}
+          isLoading={isLoading}
           onChange={handleChange}
+          onForgotPassword={() => setAuthMode('forgotPassword')}
           onSubmit={handleSubmit}
-          onToggleMode={() => setAuthMode("register")}
-          onForgotPassword={() => setAuthMode("forgotPassword")}
+          onToggleMode={() => setAuthMode('register')}
+          password={formData.password}
+          role={role}
         />
       )}
 
-      {mode === "register" && (
+      {mode === 'register' && (
         <RegisterForm
+          error={error}
           formData={formData}
           isLoading={isLoading}
-          error={error}
           onChange={handleChange}
           onSubmit={handleSubmit}
-          onToggleMode={() => setAuthMode("login")}
+          onToggleMode={() => setAuthMode('login')}
         />
       )}
 
-      {mode === "verifyOtp" && (
+      {mode === 'verifyOtp' && (
         <VerifyOtpForm
-          otp={formData.otp}
-          isLoading={isLoading}
           error={error}
+          isLoading={isLoading}
           onChange={handleOtpChange}
           onSubmit={handleSubmit}
+          otp={formData.otp}
         />
       )}
 
-      {mode === "forgotPassword" && (
+      {mode === 'forgotPassword' && (
         <ForgotPasswordForm
           email={formData.email}
           isLoading={isLoading}
+          onBack={() => setAuthMode('login')}
           onChange={handleChange}
           onSubmit={handleSubmit}
-          onBack={() => setAuthMode("login")}
         />
       )}
 
-      {mode === "resetOtp" && (
+      {mode === 'resetOtp' && (
         <VerifyOtpForm
-          otp={formData.otp}
-          isLoading={isLoading}
           error={error}
+          isLoading={isLoading}
           onChange={handleOtpChange}
           onSubmit={handleSubmit}
+          otp={formData.otp}
         />
       )}
 
-      {mode === "resetPassword" && (
+      {mode === 'resetPassword' && (
         <ResetPasswordForm
-          newPassword={formData.password}
           confirmNewPassword={formData.confirmPassword}
           isLoading={isLoading}
+          newPassword={formData.password}
           onChange={handleChange}
           onSubmit={handleSubmit}
         />

@@ -1,8 +1,9 @@
-import React from "react";
-import { AuthContainer, FormSection, FormWrapper } from "./index.styles";
-import Image from "../../components/atoms/Image";
-import HeroOverlayContent from "../../components/molecules/HeroOverlayContent";
-import ScissorsBackground from "../../components/atoms/ScissorsBackground";
+/** biome-ignore-all lint/nursery/useConsistentTypeDefinitions: <explanation> */
+import React from 'react';
+import { AuthContainer, FormSection, FormWrapper } from './index.styles';
+import Image from '../../components/atoms/Image';
+import HeroOverlayContent from '../../components/molecules/HeroOverlayContent';
+import ScissorsBackground from '../../components/atoms/ScissorsBackground';
 
 interface IAuthTemplate {
   children: React.ReactNode;

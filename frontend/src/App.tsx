@@ -1,71 +1,33 @@
-import { Toaster } from "react-hot-toast";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import "./App.css";
-import AuthContainer from "./components/organisms/AuthContainer";
-import AuthTemplate from "./templates/AuthTemplate";
-import { theme } from "./styles/theme";
-import ProtectedRoute from "./routes/protectedRoutes";
-import NotFoundPage from "./pages/NotFound";
-import BarberProfileForm from "./components/molecules/BarberProfileForm";
-import OAuthCallback from "./pages/OAuthCallback";
-import { CustomerDashboard } from "./pages/Dashboard/Customer";
-import { BarberDashboard } from "./pages/Dashboard/Barber";
+/** biome-ignore-all lint/nursery/useConsistentTypeDefinitions: <explanation> */
+import './App.css';
+import {
+  createRouter,
+  RouterProvider as TanstackRouterProvider,
+} from '@tanstack/react-router';
+import { Route } from './routes/not-found';
+// Import the generated route tree
+import { routeTree } from './routeTree.gen';
+import useAuthStore from './store/AuthStore';
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <AuthTemplate>
-        <AuthContainer />
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              background: theme.colors.background,
-              color: theme.colors.textPrimary,
-            },
-          }}
-        />
-      </AuthTemplate>
-    ),
+// Create a new router instance
+const tanstackRouter = createRouter({
+  routeTree,
+  scrollRestoration: true,
+  context: {
+    auth: undefined!, // This will be set after we wrap the app in an AuthProvider
   },
-  {
-    path: "/customer/dashboard",
-    element: (
-      <ProtectedRoute role="customer">
-        <CustomerDashboard />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/barber/dashboard",
-    element: (
-      <ProtectedRoute role="barber">
-        <BarberDashboard />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/barber/setup-profile",
-    element: (
-      <ProtectedRoute role="barber">
-        <BarberProfileForm />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/oauth2/success/*",
-    element: <OAuthCallback />
-  },
-  {
-    path: "*",
-    element: <NotFoundPage />,
+  notFoundRoute: Route,
+});
+
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof tanstackRouter;
   }
-]);
+}
 
 function App() {
-  return <RouterProvider router={router} />;
+  const auth = useAuthStore();
+  return <TanstackRouterProvider context={{ auth }} router={tanstackRouter} />;
 }
 
 export default App;

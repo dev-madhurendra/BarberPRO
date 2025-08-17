@@ -1,12 +1,12 @@
-import React from "react";
-import Typography from "../../atoms/Typography";
-import Input from "../../atoms/Input";
-import Button from "../../atoms/Button";
-import SocialLoginButtons from "../OauthButtons";
-import { REGISTER_FORM_INPUT_FIELDS } from "../../../utils/functionConfig";
-import { LinkTextWrapper } from "../LoginForm/index.styles";
+import React from 'react';
+import Typography from '../../atoms/Typography';
+import Input from '../../atoms/Input';
+import Button from '../../atoms/Button';
+import SocialLoginButtons from '../OauthButtons';
+import { REGISTER_FORM_INPUT_FIELDS } from '../../../utils/functionConfig';
+import { LinkTextWrapper } from '../LoginForm/index.styles';
 
-interface RegisterFormProps {
+type RegisterFormProps = {
   formData: {
     name: string;
     email: string;
@@ -18,7 +18,7 @@ interface RegisterFormProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
   onToggleMode: () => void;
-}
+};
 
 const RegisterForm: React.FC<RegisterFormProps> = ({
   formData,
@@ -33,43 +33,43 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   return (
     <form onSubmit={onSubmit}>
       {fields.map((field, index) => (
-        <div key={field.name} style={{ marginTop: index > 0 ? "12px" : "0" }}>
+        <div key={field.name} style={{ marginTop: index > 0 ? '12px' : '0' }}>
           <Typography text={field.label} variant="sm" weight="medium" />
           <Input
             name={field.name}
-            type={field.type}
-            placeholder={field.placeholder}
-            value={field.value}
             onChange={onChange}
+            placeholder={field.placeholder}
+            type={field.type}
+            value={field.value}
           />
         </div>
       ))}
 
       {error && (
         <Typography
-          text={error}
           color="red"
+          style={{ marginTop: '8px' }}
+          text={error}
           variant="sm"
-          style={{ marginTop: "8px" }}
         />
       )}
 
       <Button
-        text={isLoading ? "Please wait..." : "Register"}
         buttonVariant="primary"
-        style={{ width: "100%", marginTop: "16px" }}
         disabled={isLoading}
+        style={{ width: '100%', marginTop: '16px' }}
+        text={isLoading ? 'Please wait...' : 'Register'}
       />
 
-      <SocialLoginButtons
-        onGoogleClick={() => console.log("Google Login")}
-        onGithubClick={() => console.log("GitHub Login")}
-        onTwitterClick={() => console.log("Twitter Login")}
-      />
+      {/* <SocialLoginButtons */}
+      {/*   onGoogleClick={() => console.log("Google Login")} */}
+      {/*   onGithubClick={() => console.log("GitHub Login")} */}
+      {/*   onTwitterClick={() => console.log("Twitter Login")} */}
+      {/* /> */}
 
       <LinkTextWrapper>
-        <Typography text="Already have an account?" className="text" />
-        <Typography text="Login" className="link" onClick={onToggleMode} />
+        <Typography className="text" text="Already have an account?" />
+        <Typography className="link" onClick={onToggleMode} text="Login" />
       </LinkTextWrapper>
     </form>
   );

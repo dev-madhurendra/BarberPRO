@@ -1,15 +1,16 @@
-import type React from "react"
-import { useEffect, useState } from "react"
-import styled, { keyframes } from "styled-components"
-import { getCurrentUser } from "../../../api/auth"
-import OAuthLoader from "../../../components/atoms/Loader"
-import { theme } from "../../../styles/theme"
-import ConnectionIndicator from "../../../components/atoms/ConnectionIndicator"
-import Typography from "../../../components/atoms/Typography"
-import Button from "../../../components/atoms/Button"
-import Card from "../../../components/atoms/Card"
-import { useRealtimeQueueSimple } from "../../../hooks/use-realtime-queue-simple"
-import Notification from "../../../components/atoms/Notification"
+import type React from 'react';
+import { useEffect, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { getCurrentUser } from '../../../api/auth';
+import OAuthLoader from '../../../components/atoms/Loader';
+import { theme } from '../../../styles/theme';
+import ConnectionIndicator from '../../../components/atoms/ConnectionIndicator';
+import Typography from '../../../components/atoms/Typography';
+import Button from '../../../components/atoms/Button';
+import Card from '../../../components/atoms/Card';
+import { useRealtimeQueueSimple } from '../../../hooks/use-realtime-queue-simple';
+import Notification from '../../../components/atoms/Notification';
+import useAuthStore from '../../../store/AuthStore';
 
 // Styled Components
 const pulse = keyframes`
@@ -19,7 +20,7 @@ const pulse = keyframes`
   50% {
     opacity: 0.5;
   }
-`
+`;
 
 const fadeIn = keyframes`
   from {
@@ -30,7 +31,7 @@ const fadeIn = keyframes`
     opacity: 1;
     transform: translateY(0);
   }
-`
+`;
 
 const DashboardContainer = styled.div`
   width: 80%;
@@ -45,7 +46,7 @@ const DashboardContainer = styled.div`
     width: 95%;
     padding: 1rem;
   }
-`
+`;
 
 const Header = styled.div`
   display: flex;
@@ -60,11 +61,11 @@ const Header = styled.div`
     gap: 1rem;
     align-items: stretch;
   }
-`
+`;
 
 const HeaderContent = styled.div`
   flex: 1;
-`
+`;
 
 const HeaderActions = styled.div`
   display: flex;
@@ -74,7 +75,7 @@ const HeaderActions = styled.div`
   @media (max-width: 768px) {
     justify-content: space-between;
   }
-`
+`;
 
 const MainGrid = styled.div`
   display: grid;
@@ -85,19 +86,19 @@ const MainGrid = styled.div`
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-`
+`;
 
 const MainContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-`
+`;
 
 const Sidebar = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-`
+`;
 
 const ActiveTokenCard = styled(Card)`
   position: relative;
@@ -117,7 +118,7 @@ const ActiveTokenCard = styled(Card)`
     border-radius: 50%;
     transform: translate(30px, -30px);
   }
-`
+`;
 
 const TokenBadge = styled.div`
   background: linear-gradient(135deg, ${theme.colors.primary} 0%, ${theme.colors.primary}dd 100%);
@@ -129,7 +130,7 @@ const TokenBadge = styled.div`
   box-shadow: 0 4px 12px ${theme.colors.primary}40;
   position: relative;
   z-index: 1;
-`
+`;
 
 const StatsGrid = styled.div`
   display: grid;
@@ -141,7 +142,7 @@ const StatsGrid = styled.div`
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-`
+`;
 
 const StatItem = styled.div`
   text-align: center;
@@ -156,7 +157,7 @@ const StatItem = styled.div`
     box-shadow: 0 8px 25px ${theme.colors.primary}15;
     border-color: ${theme.colors.primary}30;
   }
-`
+`;
 
 const LiveIndicator = styled.div`
   width: 8px;
@@ -165,7 +166,7 @@ const LiveIndicator = styled.div`
   border-radius: 50%;
   animation: ${pulse} 2s infinite;
   box-shadow: 0 0 10px ${theme.colors.success}60;
-`
+`;
 
 const ServiceGrid = styled.div`
   display: grid;
@@ -175,7 +176,7 @@ const ServiceGrid = styled.div`
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
-`
+`;
 
 const ServiceCard = styled(Card)`
   text-align: center;
@@ -205,7 +206,7 @@ const ServiceCard = styled(Card)`
   &:hover::before {
     left: 100%;
   }
-`
+`;
 
 const ServiceIcon = styled.div`
   width: 56px;
@@ -225,7 +226,7 @@ const ServiceIcon = styled.div`
     transform: scale(1.1);
     background: linear-gradient(135deg, ${theme.colors.primary}40, ${theme.colors.primary}60);
   }
-`
+`;
 
 const AppointmentItem = styled.div`
   display: flex;
@@ -248,14 +249,15 @@ const AppointmentItem = styled.div`
     align-items: flex-start;
     gap: 0.75rem;
   }
-`
+`;
 
 const StatusBadge = styled.div<{ status: string }>`
-  background: ${props => 
-    props.status === "Completed" ? theme.colors.success :
-    props.status === "Upcoming" ? theme.colors.primary :
-    theme.colors.secondary
-  };
+  background: ${(props) =>
+    props.status === 'Completed'
+      ? theme.colors.success
+      : props.status === 'Upcoming'
+        ? theme.colors.primary
+        : theme.colors.secondary};
   color: white;
   padding: 0.375rem 0.875rem;
   border-radius: ${theme.borderRadius.md};
@@ -263,7 +265,7 @@ const StatusBadge = styled.div<{ status: string }>`
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-`
+`;
 
 const SidebarCard = styled(Card)`
   background: linear-gradient(135deg, ${theme.colors.background} 0%, ${theme.colors.primary}05 100%);
@@ -274,7 +276,7 @@ const SidebarCard = styled(Card)`
     border-color: ${theme.colors.primary}30;
     box-shadow: 0 8px 25px ${theme.colors.primary}10;
   }
-`
+`;
 
 const BarberItem = styled.div`
   display: flex;
@@ -295,21 +297,22 @@ const BarberItem = styled.div`
     padding-right: 1rem;
     border-radius: ${theme.borderRadius.md};
   }
-`
+`;
 
 const BarberStatus = styled.div<{ status: string }>`
-  background: ${props => 
-    props.status === "available" ? theme.colors.success :
-    props.status === "busy" ? theme.colors.secondary :
-    theme.colors.textSecondary
-  };
+  background: ${(props) =>
+    props.status === 'available'
+      ? theme.colors.success
+      : props.status === 'busy'
+        ? theme.colors.secondary
+        : theme.colors.textSecondary};
   color: white;
   padding: 0.25rem 0.75rem;
   border-radius: ${theme.borderRadius.md};
   font-size: 0.75rem;
   font-weight: 500;
   text-transform: capitalize;
-`
+`;
 
 const ActionButtons = styled.div`
   display: flex;
@@ -319,7 +322,7 @@ const ActionButtons = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
   }
-`
+`;
 
 const CancelButton = styled(Button)`
   background: linear-gradient(135deg, ${theme.colors.textSecondary} 0%, ${theme.colors.textSecondary}dd 100%);
@@ -330,84 +333,95 @@ const CancelButton = styled(Button)`
     background: linear-gradient(135deg, ${theme.colors.textSecondary}dd 0%, ${theme.colors.textSecondary}bb 100%);
     transform: translateY(-1px);
   }
-`
+`;
 
 export const CustomerDashboard: React.FC = () => {
-  const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState<any>(null)
-  const [appointments, setAppointments] = useState<any[]>([])
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<any>(null);
+  const [appointments, setAppointments] = useState<any[]>([]);
 
-  const { queueData, barbers, isConnected, notifications, reconnect, clearNotifications } =
-    useRealtimeQueueSimple("user-123")
+  const { token } = useAuthStore();
+
+  const {
+    queueData,
+    barbers,
+    isConnected,
+    notifications,
+    reconnect,
+    clearNotifications,
+  } = useRealtimeQueueSimple('user-123');
 
   const handleLogout = () => {
-    localStorage.removeItem("token")
-    localStorage.removeItem("role")
-    window.location.href = "/"
-  }
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    window.location.href = '/';
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem("token")
         if (!token) {
-          console.log("No token found")
-          return
+          console.log('No token found');
+          return;
         }
 
-        const response = await getCurrentUser()
-        setUser(response.data)
+        const response = await getCurrentUser();
+        setUser(response.data);
 
-        if (response.data.role === "CUSTOMER") {
+        if (response.data.role === 'CUSTOMER') {
           setAppointments([
             {
-              barberName: "Mike Johnson",
-              date: "2025-01-20",
-              time: "11:00 AM",
-              service: "Full Service",
-              status: "Upcoming",
+              barberName: 'Mike Johnson',
+              date: '2025-01-20',
+              time: '11:00 AM',
+              service: 'Full Service',
+              status: 'Upcoming',
             },
             {
-              barberName: "Sarah Wilson",
-              date: "2025-01-15",
-              time: "3:30 PM",
-              service: "Quick Cut",
-              status: "Completed",
+              barberName: 'Sarah Wilson',
+              date: '2025-01-15',
+              time: '3:30 PM',
+              service: 'Quick Cut',
+              status: 'Completed',
             },
-          ])
+          ]);
         }
       } catch (err) {
-        console.error(err)
-        handleLogout()
+        console.error(err);
+        handleLogout();
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchUserData()
-  }, [])
+    fetchUserData();
+  }, []);
 
-  if (loading) return <OAuthLoader />
+  if (loading) return <OAuthLoader />;
 
   return (
     <DashboardContainer>
       {notifications.map((notification, index) => (
-        <Notification key={index} message={notification} onClose={() => clearNotifications()} />
+        <Notification
+          key={index}
+          message={notification}
+          onClose={() => clearNotifications()}
+        />
       ))}
 
       <Header>
         <HeaderContent>
-          <Typography 
-            text={`Welcome back, ${user?.data.name}`} 
-            variant="xxl" 
-            weight="bold" 
-            color={theme.colors.primary} 
+          <Typography
+            text={`Welcome back, ${user?.data.name}`}
+            variant="xxl"
+            weight="bold"
+            color={theme.colors.primary}
           />
           <Typography
             text="Manage your appointments and track your queue position in real-time"
             variant="md"
             color={theme.colors.textSecondary}
-            style={{ marginTop: "0.75rem", lineHeight: "1.6" }}
+            style={{ marginTop: '0.75rem', lineHeight: '1.6' }}
           />
         </HeaderContent>
         <HeaderActions>
@@ -416,7 +430,11 @@ export const CustomerDashboard: React.FC = () => {
             lastUpdated={queueData.lastUpdated}
             onReconnect={reconnect}
           />
-          <Button text="Logout" buttonVariant="outline" onClick={handleLogout} />
+          <Button
+            text="Logout"
+            buttonVariant="outline"
+            onClick={handleLogout}
+          />
         </HeaderActions>
       </Header>
 
@@ -424,25 +442,36 @@ export const CustomerDashboard: React.FC = () => {
         <MainContent>
           {/* Active Token */}
           <ActiveTokenCard>
-            <div style={{ 
-              display: "flex", 
-              justifyContent: "space-between", 
-              alignItems: "center", 
-              marginBottom: "1.5rem",
-              position: "relative",
-              zIndex: 1
-            }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '1.5rem',
+                position: 'relative',
+                zIndex: 1,
+              }}
+            >
               <Typography text="Your Active Token" variant="lg" weight="bold" />
-              <TokenBadge>
-                Token #{queueData.tokenNumber}
-              </TokenBadge>
+              <TokenBadge>Token #{queueData.tokenNumber}</TokenBadge>
             </div>
 
             <StatsGrid>
               <StatItem>
-                <Typography text={`${queueData.position}`} variant="xl" weight="bold" color={theme.colors.primary} />
-                <Typography text="People ahead" variant="sm" color={theme.colors.textSecondary} />
-                {isConnected && <LiveIndicator style={{ margin: "0.5rem auto 0" }} />}
+                <Typography
+                  text={`${queueData.position}`}
+                  variant="xl"
+                  weight="bold"
+                  color={theme.colors.primary}
+                />
+                <Typography
+                  text="People ahead"
+                  variant="sm"
+                  color={theme.colors.textSecondary}
+                />
+                {isConnected && (
+                  <LiveIndicator style={{ margin: '0.5rem auto 0' }} />
+                )}
               </StatItem>
               <StatItem>
                 <Typography
@@ -451,76 +480,114 @@ export const CustomerDashboard: React.FC = () => {
                   weight="bold"
                   color={theme.colors.primary}
                 />
-                <Typography text="Minutes wait" variant="sm" color={theme.colors.textSecondary} />
+                <Typography
+                  text="Minutes wait"
+                  variant="sm"
+                  color={theme.colors.textSecondary}
+                />
               </StatItem>
               <StatItem>
                 <Typography
-                  text={queueData.barberName.split(" ")[0]}
+                  text={queueData.barberName.split(' ')[0]}
                   variant="xl"
                   weight="bold"
                   color={theme.colors.primary}
                 />
-                <Typography text="Your barber" variant="sm" color={theme.colors.textSecondary} />
+                <Typography
+                  text="Your barber"
+                  variant="sm"
+                  color={theme.colors.textSecondary}
+                />
               </StatItem>
             </StatsGrid>
 
             <ActionButtons>
-              <Button text="View Details" buttonVariant="outline" style={{ flex: 1 }} />
+              <Button
+                text="View Details"
+                buttonVariant="outline"
+                style={{ flex: 1 }}
+              />
               <CancelButton text="Cancel Token" style={{ flex: 1 }} />
             </ActionButtons>
           </ActiveTokenCard>
 
           {/* Book New Token */}
           <Card>
-            <Typography text="Book a New Token" variant="lg" weight="bold" style={{ marginBottom: "0.75rem" }} />
+            <Typography
+              text="Book a New Token"
+              variant="lg"
+              weight="bold"
+              style={{ marginBottom: '0.75rem' }}
+            />
             <Typography
               text="Reserve your spot and avoid the wait with our premium booking system"
               variant="md"
               color={theme.colors.textSecondary}
-              style={{ marginBottom: "2rem", lineHeight: "1.6" }}
+              style={{ marginBottom: '2rem', lineHeight: '1.6' }}
             />
 
             <ServiceGrid>
               <ServiceCard>
-                <ServiceIcon>✂️</ServiceIcon>
-                <Typography text="Quick Cut" variant="md" weight="bold" style={{ marginBottom: "0.5rem" }} />
+                <ServiceIcon>✂</ServiceIcon>
+                <Typography
+                  text="Quick Cut"
+                  variant="md"
+                  weight="bold"
+                  style={{ marginBottom: '0.5rem' }}
+                />
                 <Typography
                   text="15-20 minutes"
                   variant="sm"
                   color={theme.colors.textSecondary}
-                  style={{ marginBottom: "1.5rem" }}
+                  style={{ marginBottom: '1.5rem' }}
                 />
-                <Button text="Book Token - $25" style={{ width: "100%" }} />
+                <Button text="Book Token - $25" style={{ width: '100%' }} />
               </ServiceCard>
 
               <ServiceCard>
                 <ServiceIcon>👤</ServiceIcon>
-                <Typography text="Full Service" variant="md" weight="bold" style={{ marginBottom: "0.5rem" }} />
+                <Typography
+                  text="Full Service"
+                  variant="md"
+                  weight="bold"
+                  style={{ marginBottom: '0.5rem' }}
+                />
                 <Typography
                   text="30-45 minutes"
                   variant="sm"
                   color={theme.colors.textSecondary}
-                  style={{ marginBottom: "1.5rem" }}
+                  style={{ marginBottom: '1.5rem' }}
                 />
-                <Button text="Book Token - $45" style={{ width: "100%" }} />
+                <Button text="Book Token - $45" style={{ width: '100%' }} />
               </ServiceCard>
             </ServiceGrid>
           </Card>
 
           {/* Appointments History */}
           <Card>
-            <Typography text="Your Appointments" variant="lg" weight="bold" style={{ marginBottom: "1.5rem" }} />
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <Typography
+              text="Your Appointments"
+              variant="lg"
+              weight="bold"
+              style={{ marginBottom: '1.5rem' }}
+            />
+            <div
+              style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+            >
               {appointments.length > 0 ? (
                 appointments.map((appt, index) => (
                   <AppointmentItem key={index}>
                     <div>
-                      <Typography text={appt.service} variant="md" weight="medium" />
+                      <Typography
+                        text={appt.service}
+                        variant="md"
+                        weight="medium"
+                      />
                       <Typography
                         text={`${appt.barberName} • ${appt.date} at ${appt.time}`}
                         variant="sm"
                         color={theme.colors.textSecondary}
-                        style={{ marginTop: "0.25rem" }}
+                        style={{ marginTop: '0.25rem' }}
                       />
                     </div>
                     <StatusBadge status={appt.status}>
@@ -529,7 +596,11 @@ export const CustomerDashboard: React.FC = () => {
                   </AppointmentItem>
                 ))
               ) : (
-                <Typography text="No appointments found." variant="sm" color={theme.colors.textSecondary} />
+                <Typography
+                  text="No appointments found."
+                  variant="sm"
+                  color={theme.colors.textSecondary}
+                />
               )}
             </div>
           </Card>
@@ -538,21 +609,68 @@ export const CustomerDashboard: React.FC = () => {
         <Sidebar>
           {/* Live Queue Status */}
           <SidebarCard>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                marginBottom: '1.5rem',
+              }}
+            >
               <Typography text="Live Queue Status" variant="lg" weight="bold" />
               {isConnected && <LiveIndicator />}
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Typography text="Total in queue" variant="sm" color={theme.colors.textSecondary} />
-                <Typography text={`${queueData.totalInQueue} people`} variant="sm" weight="medium" />
+            <div
+              style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  text="Total in queue"
+                  variant="sm"
+                  color={theme.colors.textSecondary}
+                />
+                <Typography
+                  text={`${queueData.totalInQueue} people`}
+                  variant="sm"
+                  weight="medium"
+                />
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Typography text="Average wait" variant="sm" color={theme.colors.textSecondary} />
-                <Typography text={`${queueData.averageWait} minutes`} variant="sm" weight="medium" />
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  text="Average wait"
+                  variant="sm"
+                  color={theme.colors.textSecondary}
+                />
+                <Typography
+                  text={`${queueData.averageWait} minutes`}
+                  variant="sm"
+                  weight="medium"
+                />
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Typography text="Available barbers" variant="sm" color={theme.colors.textSecondary} />
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  text="Available barbers"
+                  variant="sm"
+                  color={theme.colors.textSecondary}
+                />
                 <Typography
                   text={`${queueData.availableBarbers} active`}
                   variant="sm"
@@ -565,17 +683,26 @@ export const CustomerDashboard: React.FC = () => {
 
           {/* Barber Availability */}
           <SidebarCard>
-            <Typography text="Available Barbers" variant="lg" weight="bold" style={{ marginBottom: "1.5rem" }} />
+            <Typography
+              text="Available Barbers"
+              variant="lg"
+              weight="bold"
+              style={{ marginBottom: '1.5rem' }}
+            />
             <div>
               {barbers.map((barber) => (
                 <BarberItem key={barber.id}>
                   <div>
-                    <Typography text={barber.name} variant="sm" weight="medium" />
                     <Typography
-                      text={`${barber.queueLength} in queue${barber.estimatedFinishTime ? ` • ${barber.estimatedFinishTime} left` : ""}`}
+                      text={barber.name}
+                      variant="sm"
+                      weight="medium"
+                    />
+                    <Typography
+                      text={`${barber.queueLength} in queue${barber.estimatedFinishTime ? ` • ${barber.estimatedFinishTime} left` : ''}`}
                       variant="xs"
                       color={theme.colors.textSecondary}
-                      style={{ marginTop: "0.25rem" }}
+                      style={{ marginTop: '0.25rem' }}
                     />
                   </div>
                   <BarberStatus status={barber.status}>
@@ -588,18 +715,55 @@ export const CustomerDashboard: React.FC = () => {
 
           {/* Your Stats */}
           <SidebarCard>
-            <Typography text="Your Stats" variant="lg" weight="bold" style={{ marginBottom: "1.5rem" }} />
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Typography text="Total visits" variant="sm" color={theme.colors.textSecondary} />
+            <Typography
+              text="Your Stats"
+              variant="lg"
+              weight="bold"
+              style={{ marginBottom: '1.5rem' }}
+            />
+            <div
+              style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  text="Total visits"
+                  variant="sm"
+                  color={theme.colors.textSecondary}
+                />
                 <Typography text="24" variant="sm" weight="medium" />
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Typography text="Favorite barber" variant="sm" color={theme.colors.textSecondary} />
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  text="Favorite barber"
+                  variant="sm"
+                  color={theme.colors.textSecondary}
+                />
                 <Typography text="Mike J." variant="sm" weight="medium" />
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Typography text="Member since" variant="sm" color={theme.colors.textSecondary} />
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  text="Member since"
+                  variant="sm"
+                  color={theme.colors.textSecondary}
+                />
                 <Typography text="Jan 2023" variant="sm" weight="medium" />
               </div>
             </div>
@@ -607,5 +771,5 @@ export const CustomerDashboard: React.FC = () => {
         </Sidebar>
       </MainGrid>
     </DashboardContainer>
-  )
-}
+  );
+};
