@@ -1,16 +1,16 @@
-import { Outlet, createRootRoute, redirect } from '@tanstack/react-router';
+import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { Toaster } from 'react-hot-toast';
+import type { AuthState } from '../store/AuthStore';
 import { theme } from '../styles/theme';
+import type { QueryClient } from '@tanstack/react-query';
 
-export const Route = createRootRoute({
-  beforeLoad: ({ context }) => {
-    // if (context.auth.token != null) {
-    //   throw redirect({
-    //     to: `/${context.auth.role}/dashboard`,
-    //   });
-    // }
-  },
+type MyRouterContext = {
+  auth: AuthState;
+  queryClient: QueryClient;
+};
+
+export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: RootComponent,
 });
 

@@ -14,8 +14,8 @@ import { Route as _protectedRouteImport } from './routes/__protected'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as Oauth2SuccessRouteImport } from './routes/oauth2/success'
 import { Route as _protectedCustomerDashboardRouteImport } from './routes/__protected/customer/dashboard'
-import { Route as _protectedBarbarSetupProfileRouteImport } from './routes/__protected/barbar/setup-profile'
-import { Route as _protectedBarbarDashboardRouteImport } from './routes/__protected/barbar/dashboard'
+import { Route as _protectedBarberSetupProfileRouteImport } from './routes/__protected/barber/setup-profile'
+import { Route as _protectedBarberDashboardRouteImport } from './routes/__protected/barber/dashboard'
 
 const NotFoundRoute = NotFoundRouteImport.update({
   id: '/not-found',
@@ -42,16 +42,16 @@ const _protectedCustomerDashboardRoute =
     path: '/customer/dashboard',
     getParentRoute: () => _protectedRoute,
   } as any)
-const _protectedBarbarSetupProfileRoute =
-  _protectedBarbarSetupProfileRouteImport.update({
-    id: '/barbar/setup-profile',
-    path: '/barbar/setup-profile',
+const _protectedBarberSetupProfileRoute =
+  _protectedBarberSetupProfileRouteImport.update({
+    id: '/barber/setup-profile',
+    path: '/barber/setup-profile',
     getParentRoute: () => _protectedRoute,
   } as any)
-const _protectedBarbarDashboardRoute =
-  _protectedBarbarDashboardRouteImport.update({
-    id: '/barbar/dashboard',
-    path: '/barbar/dashboard',
+const _protectedBarberDashboardRoute =
+  _protectedBarberDashboardRouteImport.update({
+    id: '/barber/dashboard',
+    path: '/barber/dashboard',
     getParentRoute: () => _protectedRoute,
   } as any)
 
@@ -59,16 +59,16 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/not-found': typeof NotFoundRoute
   '/oauth2/success': typeof Oauth2SuccessRoute
-  '/barbar/dashboard': typeof _protectedBarbarDashboardRoute
-  '/barbar/setup-profile': typeof _protectedBarbarSetupProfileRoute
+  '/barber/dashboard': typeof _protectedBarberDashboardRoute
+  '/barber/setup-profile': typeof _protectedBarberSetupProfileRoute
   '/customer/dashboard': typeof _protectedCustomerDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/not-found': typeof NotFoundRoute
   '/oauth2/success': typeof Oauth2SuccessRoute
-  '/barbar/dashboard': typeof _protectedBarbarDashboardRoute
-  '/barbar/setup-profile': typeof _protectedBarbarSetupProfileRoute
+  '/barber/dashboard': typeof _protectedBarberDashboardRoute
+  '/barber/setup-profile': typeof _protectedBarberSetupProfileRoute
   '/customer/dashboard': typeof _protectedCustomerDashboardRoute
 }
 export interface FileRoutesById {
@@ -77,8 +77,8 @@ export interface FileRoutesById {
   '/__protected': typeof _protectedRouteWithChildren
   '/not-found': typeof NotFoundRoute
   '/oauth2/success': typeof Oauth2SuccessRoute
-  '/__protected/barbar/dashboard': typeof _protectedBarbarDashboardRoute
-  '/__protected/barbar/setup-profile': typeof _protectedBarbarSetupProfileRoute
+  '/__protected/barber/dashboard': typeof _protectedBarberDashboardRoute
+  '/__protected/barber/setup-profile': typeof _protectedBarberSetupProfileRoute
   '/__protected/customer/dashboard': typeof _protectedCustomerDashboardRoute
 }
 export interface FileRouteTypes {
@@ -87,16 +87,16 @@ export interface FileRouteTypes {
     | '/'
     | '/not-found'
     | '/oauth2/success'
-    | '/barbar/dashboard'
-    | '/barbar/setup-profile'
+    | '/barber/dashboard'
+    | '/barber/setup-profile'
     | '/customer/dashboard'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/not-found'
     | '/oauth2/success'
-    | '/barbar/dashboard'
-    | '/barbar/setup-profile'
+    | '/barber/dashboard'
+    | '/barber/setup-profile'
     | '/customer/dashboard'
   id:
     | '__root__'
@@ -104,8 +104,8 @@ export interface FileRouteTypes {
     | '/__protected'
     | '/not-found'
     | '/oauth2/success'
-    | '/__protected/barbar/dashboard'
-    | '/__protected/barbar/setup-profile'
+    | '/__protected/barber/dashboard'
+    | '/__protected/barber/setup-profile'
     | '/__protected/customer/dashboard'
   fileRoutesById: FileRoutesById
 }
@@ -153,32 +153,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof _protectedCustomerDashboardRouteImport
       parentRoute: typeof _protectedRoute
     }
-    '/__protected/barbar/setup-profile': {
-      id: '/__protected/barbar/setup-profile'
-      path: '/barbar/setup-profile'
-      fullPath: '/barbar/setup-profile'
-      preLoaderRoute: typeof _protectedBarbarSetupProfileRouteImport
+    '/__protected/barber/setup-profile': {
+      id: '/__protected/barber/setup-profile'
+      path: '/barber/setup-profile'
+      fullPath: '/barber/setup-profile'
+      preLoaderRoute: typeof _protectedBarberSetupProfileRouteImport
       parentRoute: typeof _protectedRoute
     }
-    '/__protected/barbar/dashboard': {
-      id: '/__protected/barbar/dashboard'
-      path: '/barbar/dashboard'
-      fullPath: '/barbar/dashboard'
-      preLoaderRoute: typeof _protectedBarbarDashboardRouteImport
+    '/__protected/barber/dashboard': {
+      id: '/__protected/barber/dashboard'
+      path: '/barber/dashboard'
+      fullPath: '/barber/dashboard'
+      preLoaderRoute: typeof _protectedBarberDashboardRouteImport
       parentRoute: typeof _protectedRoute
     }
   }
 }
 
 interface _protectedRouteChildren {
-  _protectedBarbarDashboardRoute: typeof _protectedBarbarDashboardRoute
-  _protectedBarbarSetupProfileRoute: typeof _protectedBarbarSetupProfileRoute
+  _protectedBarberDashboardRoute: typeof _protectedBarberDashboardRoute
+  _protectedBarberSetupProfileRoute: typeof _protectedBarberSetupProfileRoute
   _protectedCustomerDashboardRoute: typeof _protectedCustomerDashboardRoute
 }
 
 const _protectedRouteChildren: _protectedRouteChildren = {
-  _protectedBarbarDashboardRoute: _protectedBarbarDashboardRoute,
-  _protectedBarbarSetupProfileRoute: _protectedBarbarSetupProfileRoute,
+  _protectedBarberDashboardRoute: _protectedBarberDashboardRoute,
+  _protectedBarberSetupProfileRoute: _protectedBarberSetupProfileRoute,
   _protectedCustomerDashboardRoute: _protectedCustomerDashboardRoute,
 }
 

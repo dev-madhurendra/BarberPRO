@@ -2,6 +2,7 @@ import axios from 'axios';
 import { API_BASE } from '../utils/constants';
 import { BarberProfileRequest } from '../utils/requestsInterface';
 import useAuthStore from '../store/AuthStore';
+import { User } from '../utils/types';
 
 export const registerUser = async (data: {
   name: string;
@@ -58,13 +59,14 @@ export const updateRole = (newRole: string) => {
   );
 };
 
-export const getCurrentUser = () => {
+export const getCurrentUser = async () => {
   const token = useAuthStore.getState().token;
-  return axios.get(`${API_BASE}/auth/me`, {
+  const data = await axios.get(`${API_BASE}/auth/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+  return data.data.data as User;
 };
 
 export const findUserByEmail = async (email: string) => {

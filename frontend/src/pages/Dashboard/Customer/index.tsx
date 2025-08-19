@@ -1,16 +1,14 @@
 import type React from 'react';
 import { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { getCurrentUser } from '../../../api/auth';
-import OAuthLoader from '../../../components/atoms/Loader';
-import { theme } from '../../../styles/theme';
-import ConnectionIndicator from '../../../components/atoms/ConnectionIndicator';
-import Typography from '../../../components/atoms/Typography';
 import Button from '../../../components/atoms/Button';
 import Card from '../../../components/atoms/Card';
-import { useRealtimeQueueSimple } from '../../../hooks/use-realtime-queue-simple';
+import ConnectionIndicator from '../../../components/atoms/ConnectionIndicator';
 import Notification from '../../../components/atoms/Notification';
+import Typography from '../../../components/atoms/Typography';
+import { useRealtimeQueueSimple } from '../../../hooks/use-realtime-queue-simple';
 import useAuthStore from '../../../store/AuthStore';
+import { theme } from '../../../styles/theme';
 
 // Styled Components
 const pulse = keyframes`
@@ -336,11 +334,9 @@ const CancelButton = styled(Button)`
 `;
 
 export const CustomerDashboard: React.FC = () => {
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
   const [appointments, setAppointments] = useState<any[]>([]);
 
-  const { token } = useAuthStore();
+  const { clear, user } = useAuthStore();
 
   const {
     queueData,
@@ -352,52 +348,32 @@ export const CustomerDashboard: React.FC = () => {
   } = useRealtimeQueueSimple('user-123');
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    window.location.href = '/';
+    clear();
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        if (!token) {
-          console.log('No token found');
-          return;
-        }
-
-        const response = await getCurrentUser();
-        setUser(response.data);
-
-        if (response.data.role === 'CUSTOMER') {
-          setAppointments([
-            {
-              barberName: 'Mike Johnson',
-              date: '2025-01-20',
-              time: '11:00 AM',
-              service: 'Full Service',
-              status: 'Upcoming',
-            },
-            {
-              barberName: 'Sarah Wilson',
-              date: '2025-01-15',
-              time: '3:30 PM',
-              service: 'Quick Cut',
-              status: 'Completed',
-            },
-          ]);
-        }
-      } catch (err) {
-        console.error(err);
-        handleLogout();
-      } finally {
-        setLoading(false);
-      }
+    const fetchUserData = () => {
+      setAppointments([
+        {
+          barberName: 'Mike Johnson',
+          date: '2025-01-20',
+          time: '11:00 AM',
+          service: 'Full Service',
+          status: 'Upcoming',
+        },
+        {
+          barberName: 'Sarah Wilson',
+          date: '2025-01-15',
+          time: '3:30 PM',
+          service: 'Quick Cut',
+          status: 'Completed',
+        },
+      ]);
     };
-
     fetchUserData();
   }, []);
 
-  if (loading) return <OAuthLoader />;
+  console.log('Rendering CustomerDashboard');
 
   return (
     <DashboardContainer>
@@ -412,28 +388,28 @@ export const CustomerDashboard: React.FC = () => {
       <Header>
         <HeaderContent>
           <Typography
-            text={`Welcome back, ${user?.data.name}`}
+            color={theme.colors.primary}
+            text={`Welcome back, ${user?.name}`}
             variant="xxl"
             weight="bold"
-            color={theme.colors.primary}
           />
           <Typography
-            text="Manage your appointments and track your queue position in real-time"
-            variant="md"
             color={theme.colors.textSecondary}
             style={{ marginTop: '0.75rem', lineHeight: '1.6' }}
+            text="Manage your appointments and track your queue position in real-time"
+            variant="md"
           />
         </HeaderContent>
         <HeaderActions>
           <ConnectionIndicator
-            status={queueData.connectionStatus}
             lastUpdated={queueData.lastUpdated}
             onReconnect={reconnect}
+            status={queueData.connectionStatus}
           />
           <Button
-            text="Logout"
             buttonVariant="outline"
             onClick={handleLogout}
+            text="Logout"
           />
         </HeaderActions>
       </Header>
@@ -459,15 +435,15 @@ export const CustomerDashboard: React.FC = () => {
             <StatsGrid>
               <StatItem>
                 <Typography
+                  color={theme.colors.primary}
                   text={`${queueData.position}`}
                   variant="xl"
                   weight="bold"
-                  color={theme.colors.primary}
                 />
                 <Typography
+                  color={theme.colors.textSecondary}
                   text="People ahead"
                   variant="sm"
-                  color={theme.colors.textSecondary}
                 />
                 {isConnected && (
                   <LiveIndicator style={{ margin: '0.5rem auto 0' }} />
@@ -475,90 +451,90 @@ export const CustomerDashboard: React.FC = () => {
               </StatItem>
               <StatItem>
                 <Typography
+                  color={theme.colors.primary}
                   text={`~${queueData.estimatedWait}`}
                   variant="xl"
                   weight="bold"
-                  color={theme.colors.primary}
                 />
                 <Typography
+                  color={theme.colors.textSecondary}
                   text="Minutes wait"
                   variant="sm"
-                  color={theme.colors.textSecondary}
                 />
               </StatItem>
               <StatItem>
                 <Typography
+                  color={theme.colors.primary}
                   text={queueData.barberName.split(' ')[0]}
                   variant="xl"
                   weight="bold"
-                  color={theme.colors.primary}
                 />
                 <Typography
+                  color={theme.colors.textSecondary}
                   text="Your barber"
                   variant="sm"
-                  color={theme.colors.textSecondary}
                 />
               </StatItem>
             </StatsGrid>
 
             <ActionButtons>
               <Button
-                text="View Details"
                 buttonVariant="outline"
                 style={{ flex: 1 }}
+                text="View Details"
               />
-              <CancelButton text="Cancel Token" style={{ flex: 1 }} />
+              <CancelButton style={{ flex: 1 }} text="Cancel Token" />
             </ActionButtons>
           </ActiveTokenCard>
 
           {/* Book New Token */}
           <Card>
             <Typography
+              style={{ marginBottom: '0.75rem' }}
               text="Book a New Token"
               variant="lg"
               weight="bold"
-              style={{ marginBottom: '0.75rem' }}
             />
             <Typography
-              text="Reserve your spot and avoid the wait with our premium booking system"
-              variant="md"
               color={theme.colors.textSecondary}
               style={{ marginBottom: '2rem', lineHeight: '1.6' }}
+              text="Reserve your spot and avoid the wait with our premium booking system"
+              variant="md"
             />
 
             <ServiceGrid>
               <ServiceCard>
                 <ServiceIcon>✂</ServiceIcon>
                 <Typography
+                  style={{ marginBottom: '0.5rem' }}
                   text="Quick Cut"
                   variant="md"
                   weight="bold"
-                  style={{ marginBottom: '0.5rem' }}
                 />
                 <Typography
-                  text="15-20 minutes"
-                  variant="sm"
                   color={theme.colors.textSecondary}
                   style={{ marginBottom: '1.5rem' }}
+                  text="15-20 minutes"
+                  variant="sm"
                 />
-                <Button text="Book Token - $25" style={{ width: '100%' }} />
+                <Button style={{ width: '100%' }} text="Book Token - $25" />
               </ServiceCard>
 
               <ServiceCard>
                 <ServiceIcon>👤</ServiceIcon>
                 <Typography
+                  style={{ marginBottom: '0.5rem' }}
                   text="Full Service"
                   variant="md"
                   weight="bold"
-                  style={{ marginBottom: '0.5rem' }}
                 />
                 <Typography
-                  text="30-45 minutes"
-                  variant="sm"
                   color={theme.colors.textSecondary}
                   style={{ marginBottom: '1.5rem' }}
+                  text="30-45 minutes"
+                  variant="sm"
                 />
-                <Button text="Book Token - $45" style={{ width: '100%' }} />
+                <Button style={{ width: '100%' }} text="Book Token - $45" />
               </ServiceCard>
             </ServiceGrid>
           </Card>
@@ -566,10 +542,10 @@ export const CustomerDashboard: React.FC = () => {
           {/* Appointments History */}
           <Card>
             <Typography
+              style={{ marginBottom: '1.5rem' }}
               text="Your Appointments"
               variant="lg"
               weight="bold"
-              style={{ marginBottom: '1.5rem' }}
             />
             <div
               style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
@@ -584,10 +560,10 @@ export const CustomerDashboard: React.FC = () => {
                         weight="medium"
                       />
                       <Typography
-                        text={`${appt.barberName} • ${appt.date} at ${appt.time}`}
-                        variant="sm"
                         color={theme.colors.textSecondary}
                         style={{ marginTop: '0.25rem' }}
+                        text={`${appt.barberName} • ${appt.date} at ${appt.time}`}
+                        variant="sm"
                       />
                     </div>
                     <StatusBadge status={appt.status}>
@@ -597,9 +573,9 @@ export const CustomerDashboard: React.FC = () => {
                 ))
               ) : (
                 <Typography
+                  color={theme.colors.textSecondary}
                   text="No appointments found."
                   variant="sm"
-                  color={theme.colors.textSecondary}
                 />
               )}
             </div>
@@ -631,9 +607,9 @@ export const CustomerDashboard: React.FC = () => {
                 }}
               >
                 <Typography
+                  color={theme.colors.textSecondary}
                   text="Total in queue"
                   variant="sm"
-                  color={theme.colors.textSecondary}
                 />
                 <Typography
                   text={`${queueData.totalInQueue} people`}
@@ -649,9 +625,9 @@ export const CustomerDashboard: React.FC = () => {
                 }}
               >
                 <Typography
+                  color={theme.colors.textSecondary}
                   text="Average wait"
                   variant="sm"
-                  color={theme.colors.textSecondary}
                 />
                 <Typography
                   text={`${queueData.averageWait} minutes`}
@@ -667,15 +643,15 @@ export const CustomerDashboard: React.FC = () => {
                 }}
               >
                 <Typography
+                  color={theme.colors.textSecondary}
                   text="Available barbers"
                   variant="sm"
-                  color={theme.colors.textSecondary}
                 />
                 <Typography
+                  color={theme.colors.primary}
                   text={`${queueData.availableBarbers} active`}
                   variant="sm"
                   weight="medium"
-                  color={theme.colors.primary}
                 />
               </div>
             </div>
@@ -684,10 +660,10 @@ export const CustomerDashboard: React.FC = () => {
           {/* Barber Availability */}
           <SidebarCard>
             <Typography
+              style={{ marginBottom: '1.5rem' }}
               text="Available Barbers"
               variant="lg"
               weight="bold"
-              style={{ marginBottom: '1.5rem' }}
             />
             <div>
               {barbers.map((barber) => (
@@ -699,10 +675,10 @@ export const CustomerDashboard: React.FC = () => {
                       weight="medium"
                     />
                     <Typography
-                      text={`${barber.queueLength} in queue${barber.estimatedFinishTime ? ` • ${barber.estimatedFinishTime} left` : ''}`}
-                      variant="xs"
                       color={theme.colors.textSecondary}
                       style={{ marginTop: '0.25rem' }}
+                      text={`${barber.queueLength} in queue${barber.estimatedFinishTime ? ` • ${barber.estimatedFinishTime} left` : ''}`}
+                      variant="xs"
                     />
                   </div>
                   <BarberStatus status={barber.status}>
@@ -716,10 +692,10 @@ export const CustomerDashboard: React.FC = () => {
           {/* Your Stats */}
           <SidebarCard>
             <Typography
+              style={{ marginBottom: '1.5rem' }}
               text="Your Stats"
               variant="lg"
               weight="bold"
-              style={{ marginBottom: '1.5rem' }}
             />
             <div
               style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
@@ -732,9 +708,9 @@ export const CustomerDashboard: React.FC = () => {
                 }}
               >
                 <Typography
+                  color={theme.colors.textSecondary}
                   text="Total visits"
                   variant="sm"
-                  color={theme.colors.textSecondary}
                 />
                 <Typography text="24" variant="sm" weight="medium" />
               </div>
@@ -746,9 +722,9 @@ export const CustomerDashboard: React.FC = () => {
                 }}
               >
                 <Typography
+                  color={theme.colors.textSecondary}
                   text="Favorite barber"
                   variant="sm"
-                  color={theme.colors.textSecondary}
                 />
                 <Typography text="Mike J." variant="sm" weight="medium" />
               </div>
@@ -760,9 +736,9 @@ export const CustomerDashboard: React.FC = () => {
                 }}
               >
                 <Typography
+                  color={theme.colors.textSecondary}
                   text="Member since"
                   variant="sm"
-                  color={theme.colors.textSecondary}
                 />
                 <Typography text="Jan 2023" variant="sm" weight="medium" />
               </div>

@@ -1,4 +1,12 @@
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
+/** biome-ignore-all lint/correctness/noInvalidUseBeforeDeclaration: <explanation> */
+import {
+  createFileRoute,
+  Outlet,
+  redirect,
+  useNavigate,
+} from '@tanstack/react-router';
+import { useEffect } from 'react';
+import useAuthStore from '../store/AuthStore';
 
 export const Route = createFileRoute('/__protected')({
   beforeLoad: ({ context }) => {
@@ -9,5 +17,16 @@ export const Route = createFileRoute('/__protected')({
       });
     }
   },
-  component: Outlet,
+  component: () => {
+    const navigate = useNavigate();
+    const { token } = useAuthStore();
+    useEffect(() => {
+      if (token == null) {
+        navigate({
+          to: '/',
+        });
+      }
+    }, [token, navigate]);
+    return <Outlet />;
+  },
 });

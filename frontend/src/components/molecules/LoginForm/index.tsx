@@ -1,13 +1,14 @@
-import React from "react";
-import Typography from "../../atoms/Typography";
-import Input from "../../atoms/Input";
-import Button from "../../atoms/Button";
-import { theme } from "../../../styles/theme";
-import SocialLoginButtons from "../OauthButtons";
-import { LinkTextWrapper, OptionsWrapper } from "./index.styles";
-import { LOGIN_FORM_INPUT_FIELDS } from "../../../utils/functionConfig";
+/** biome-ignore-all assist/source/useSortedAttributes: <explanation> */
+import React from 'react';
+import Typography from '../../atoms/Typography';
+import Input from '../../atoms/Input';
+import Button from '../../atoms/Button';
+import { theme } from '../../../styles/theme';
+import SocialLoginButtons from '../OauthButtons';
+import { LinkTextWrapper, OptionsWrapper } from './index.styles';
+import { LOGIN_FORM_INPUT_FIELDS } from '../../../utils/functionConfig';
 
-interface LoginFormProps {
+type LoginFormProps = {
   email: string;
   password: string;
   isLoading: boolean;
@@ -17,7 +18,7 @@ interface LoginFormProps {
   onSubmit: (e: React.FormEvent) => void;
   onToggleMode: () => void;
   onForgotPassword: () => void;
-}
+};
 
 const LoginForm: React.FC<LoginFormProps> = ({
   email,
@@ -31,13 +32,13 @@ const LoginForm: React.FC<LoginFormProps> = ({
 }) => {
   const inputFields = LOGIN_FORM_INPUT_FIELDS(email, password);
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
   };
 
   return (
     <form onSubmit={onSubmit}>
       {inputFields.map((field, index) => (
-        <div key={field.name} style={{ marginTop: index === 0 ? 0 : "12px" }}>
+        <div key={field.name} style={{ marginTop: index === 0 ? 0 : '12px' }}>
           <Typography text={field.label} variant="sm" weight="medium" />
           <Input
             name={field.name}
@@ -54,10 +55,10 @@ const LoginForm: React.FC<LoginFormProps> = ({
           <input type="checkbox" /> Remember me
         </label>
         <Typography
-          text="Forgot password?"
           color={theme.colors.accent}
-          style={{ cursor: "pointer" }}
           onClick={onForgotPassword}
+          style={{ cursor: 'pointer' }}
+          text="Forgot password?"
         />
       </OptionsWrapper>
 
@@ -66,21 +67,21 @@ const LoginForm: React.FC<LoginFormProps> = ({
           text={error}
           color="red"
           variant="sm"
-          style={{ marginTop: "8px" }}
+          style={{ marginTop: '8px' }}
         />
       )}
 
       <Button
-        text={isLoading ? "Please wait..." : "Sign in"}
+        text={isLoading ? 'Please wait...' : 'Sign in'}
         buttonVariant="primary"
-        style={{ width: "100%", marginTop: "16px" }}
+        style={{ width: '100%', marginTop: '16px' }}
         disabled={isLoading}
       />
 
       <SocialLoginButtons
         onGoogleClick={() => handleGoogleLogin()}
-        onGithubClick={() => console.log("GitHub Login")}
-        onTwitterClick={() => console.log("Twitter Login")}
+        onGithubClick={() => console.log('GitHub Login')}
+        onTwitterClick={() => console.log('Twitter Login')}
       />
 
       <LinkTextWrapper>

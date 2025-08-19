@@ -1,23 +1,34 @@
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import AuthTemplate from '../templates/AuthTemplate';
 import AuthContainer from '../components/organisms/AuthContainer';
-import useAuthStore from '../store/AuthStore';
+import useAuthStore, { ROLE } from '../store/AuthStore';
 import { useEffect } from 'react';
+import OAuthLoader from '../components/atoms/Loader';
 
 export const Route = createFileRoute('/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { token } = useAuthStore();
+  const { user, _hasHydrated, isLoading, fetchUser } = useAuthStore();
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (token) {
+    if (_hasHydrated && fetchUser) {
+      fetchUser();
+    }
+  }, [_hasHydrated, fetchUser]);
+  useEffect(() => {
+    if (user != null) {
       navigate({
-        to: `/${useAuthStore.getState().role}/dashboard`,
+        to: `${user.role.toLocaleLowerCase() === ROLE.barber ? ROLE.barber : ROLE.customer}/dashboard`,
       });
     }
-  }, [token, navigate]);
+  }, [user, navigate]);
+
+  if (!_hasHydrated || isLoading) {
+    return <OAuthLoader />;
+  }
   return (
     <AuthTemplate>
       <AuthContainer />
