@@ -7,7 +7,7 @@ import SocialLoginButtons from "../OauthButtons";
 import { LinkTextWrapper, OptionsWrapper } from "./index.styles";
 import { LOGIN_FORM_INPUT_FIELDS } from "../../../utils/functionConfig";
 
-interface LoginFormProps {
+export interface LoginFormProps {
   email: string;
   password: string;
   isLoading: boolean;
