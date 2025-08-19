@@ -2,6 +2,7 @@ import React from "react";
 import Button from "../../atoms/Button";
 import Input from "../../atoms/Input";
 import { ResetPasswordWrapper } from "./index.styles";
+import { RESET_PASSWORD_FORM } from "../../../utils/constants";
 
 interface ResetPasswordFormProps {
   newPassword: string;
@@ -18,7 +19,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
   onChange,
   onSubmit,
 }) => (
-  <ResetPasswordWrapper onSubmit={onSubmit}>
+  <ResetPasswordWrapper onSubmit={onSubmit} aria-label={RESET_PASSWORD_FORM}>
     <Input
       type="password"
       name="password"

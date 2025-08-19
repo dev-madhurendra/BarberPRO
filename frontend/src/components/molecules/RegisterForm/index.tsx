@@ -5,8 +5,9 @@ import Button from "../../atoms/Button";
 import SocialLoginButtons from "../OauthButtons";
 import { REGISTER_FORM_INPUT_FIELDS } from "../../../utils/functionConfig";
 import { LinkTextWrapper } from "../LoginForm/index.styles";
+import { REGISTER_FORM } from "../../../utils/constants";
 
-interface RegisterFormProps {
+export interface RegisterFormProps {
   formData: {
     name: string;
     email: string;
@@ -31,7 +32,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   const fields = REGISTER_FORM_INPUT_FIELDS(formData);
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} aria-label={REGISTER_FORM}>
       {fields.map((field, index) => (
         <div key={field.name} style={{ marginTop: index > 0 ? "12px" : "0" }}>
           <Typography text={field.label} variant="sm" weight="medium" />
@@ -61,7 +62,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         disabled={isLoading}
       />
 
-      <SocialLoginButtons
+      <SocialLoginButtons 
         onGoogleClick={() => console.log("Google Login")}
         onGithubClick={() => console.log("GitHub Login")}
         onTwitterClick={() => console.log("Twitter Login")}

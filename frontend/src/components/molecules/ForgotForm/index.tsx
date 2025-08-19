@@ -2,8 +2,9 @@ import React from "react";
 import Button from "../../atoms/Button";
 import Input from "../../atoms/Input";
 import { ForgotPasswordWrapper, BackButton } from "./index.styles";
+import { FORGOT_PASSWORD_FORM } from "../../../utils/constants";
 
-interface ForgotPasswordFormProps {
+export interface ForgotPasswordFormProps {
   email: string;
   isLoading: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -18,7 +19,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
   onSubmit,
   onBack,
 }) => (
-  <ForgotPasswordWrapper onSubmit={onSubmit}>
+  <ForgotPasswordWrapper onSubmit={onSubmit}  aria-label={FORGOT_PASSWORD_FORM}>
     <Input
       type="email"
       name="email"
